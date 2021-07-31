@@ -14,6 +14,8 @@ Thanks for dropping by our code repository! This is the repo where issues and pu
 
 &NewLine;
 
+&NewLine;
+
 ## Reporting bugs
 
 Navigate to the *Issues* tab at the top and create a new issue.
@@ -27,6 +29,8 @@ After a bug is submited, you can track our progress and make sure everything is 
 
 &NewLine;
 
+&NewLine;
+
 ## Suggesting features
 
 Navigate to the *Issues* tab at the top and create a new issue.
@@ -37,6 +41,8 @@ Make a descriptive but concise title and write a brief couple sentences about yo
 When you're done, just submit. 
 
 After a suggestion is submited, you can track out progress and see your idea come to life!
+
+&NewLine;
 
 &NewLine;
 
