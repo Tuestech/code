@@ -12,9 +12,7 @@ Thanks for dropping by our code repository! This is the repo where issues and pu
   
  - [Pull requests](#Pull-requests)
 
-&NewLine;
-
-&NewLine;
+&nbsp;
 
 ## Reporting bugs
 
@@ -27,9 +25,7 @@ When you're done, just submit.
 
 After a bug is submited, you can track our progress and make sure everything is fixed.
 
-&NewLine;
-
-&NewLine;
+&nbsp;
 
 ## Suggesting features
 
@@ -42,9 +38,7 @@ When you're done, just submit.
 
 After a suggestion is submited, you can track out progress and see your idea come to life!
 
-&NewLine;
-
-&NewLine;
+&nbsp;
 
 ## Contributing
 
