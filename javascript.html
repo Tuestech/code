@@ -330,6 +330,31 @@
     document.getElementById("edit-delete").onclick = function() {
       deleteTask(index);
     }
+    document.getElementById("ok").setAttribute("onclick", "okButton("+index+")")
+    document.getElementById("ok").onclick = function() {
+      okButton(index);
+    }
+  }
+  function okButton(index) {
+    name = document.getElementById("name-input").value
+    start = document.getElementById("start-input").value
+    due = document.getElementById("due-input").value
+    link = document.getElementById("name-input").value
+
+    if ((name == "")||(start == "")||(due == "")) {
+      alert("Please fill all required fields. (Link is not required)")
+      return
+    }
+
+    data[index][0] = name
+    data[index][1] = new Date(start)
+    data[index][2] = new Date(due)
+    if (link != "") {
+      data[index][5] = link
+    }
+    forceUpdate()
+    closeOverlay()
+    updateTasks()
   }
   function closeOverlay() {
     document.getElementById("edit-overlay").setAttribute("style", "display: none;")
