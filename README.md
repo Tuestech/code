@@ -8,9 +8,9 @@ Thanks for dropping by our code repository! This is the repo where issues and pu
 
 [Contributing](#Contributing)
 
--[Using Github](#Using-Github)
+ -[Using Github](#Using-Github)
   
--[Pull requests](#Pull-requests)
+ -[Pull requests](#Pull-requests)
 
 &nbsp;
 
