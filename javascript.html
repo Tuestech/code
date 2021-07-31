@@ -326,7 +326,7 @@
   }
   function editButton(index) {
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
-    document.getElementById("edit-overlay").setAttribute("onclick", "deleteTask("+index+")")
+    document.getElementById("edit-delete").setAttribute("onclick", "deleteTask("+index+")")
     document.getElementById("edit-delete").onclick = function() {
       deleteTask(index);
     }
