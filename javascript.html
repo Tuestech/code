@@ -325,6 +325,13 @@
     }
   }
   function editButton(index) {
+    // Set edit panel values to existing values in data
+    document.getElementById("name-input").value = data[index][0]
+    document.getElementById("start-input").value = new Date(data[index][1])
+    document.getElementById("due-input").value = new Date(data[index][2])
+    document.getElementById("name-input").value = data[index][5]
+    
+    // Bind buttons with correct functions and indices
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
     document.getElementById("edit-delete").setAttribute("onclick", "deleteTask("+index+")")
     document.getElementById("edit-delete").onclick = function() {
