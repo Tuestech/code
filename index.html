@@ -90,16 +90,16 @@
 				<div id="edit-overlay" class="edit" style="display: none;">
 					<div class="alert">
 						<div class="inputs">
-							<input type="text" class="input" style="grid-area: name;"></input><p style="grid-area: name-label">Task Name</p>
-							<input type="date" class="input" style="grid-area: start;"></input><p style="grid-area: start-label">Start Date</p>
-							<input type="date" class="input" style="grid-area: due;"></input><p style="grid-area: due-label">Due Date</p>
-							<input type="text" class="input" style="grid-area: link;"></input><p style="grid-area: link-label">Link</p>
+							<input type="text" class="input" id="name-input" style="grid-area: name;"></input><p style="grid-area: name-label">Task Name</p>
+							<input type="date" class="input" id="start-input" style="grid-area: start;"></input><p style="grid-area: start-label">Start Date</p>
+							<input type="date" class="input" id="due-input" style="grid-area: due;"></input><p style="grid-area: due-label">Due Date</p>
+							<input type="text" class="input" id="link-input" style="grid-area: link;"></input><p style="grid-area: link-label">Link</p>
 						</div>
 						<div class="buttons">
 							<button class="delete" id="edit-delete">Delete</button>
 							<div></div>
 							<button class="cancel" onclick="closeOverlay()">Cancel</button>
-							<button class="ok">OK</button>
+							<button class="ok" id="ok">OK</button>
 						</div>
 					</div>
 				</div>
