@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <div id="loading">
+      <div></div>
+      <div>
+        <img id = "logo" src="https://github.com/Tuestech/tuestech.github.io/raw/main/Tuesday%20Logo.png">
+        <h1>Loading...</h1>
+      </div>
+      <div></div>
+    </div>
+    <div id="body">
+      <div class="nav">
+        <img id = "logo" src="https://github.com/Tuestech/tuestech.github.io/raw/main/Tuesday%20Logo.png">
+        <div onclick="setPage('dash')" class="nav-item" id = "dash">
+          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Dashboard%20Icon.png"></a>
+          <a href="#" onclick="updateDashboard()" class="nav-link">Dashboard</a>
+        </div>
+        <div onclick="setPage('tasks')" class="nav-item" id = "tasks">
+          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Tasks%20Icon.png"></a>
+          <a href="#" class="nav-link">Tasks</a>
+        </div>
+        <div class="nav-item" id = "settings">
+          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Settings%20Icon.png"></a>
+          <a href="#" class="nav-link">Settings</a>
+        </div>
+      </div>
+      <div id = "dash body" class="dash main">
+        <header>Dashboard</header>
+        <div id="today">
+          <div id="today-container">
+            <h1>Today</h1>
+            <h2 id="date">Sun, May 30</h2>
+            <h2>Tasks:</h2>
+          </div>
+          <div id="list">
+            <div>
+              <input class = "scheck hidden" type="checkbox" id = "butt2">
+				      <label for = "butt2">✔</label>
+            </div>
+            <div id = 'task-name'><a href='https://www.google.com' target='_blank'>Name</a><div style='background-color: #F4CCCC;'></div></div>
+          </div>
+        </div>
+        <div id="timeline">
+          <div id="d0" class="day" style="grid-area: d1;">a</div>
+          <div id="d1" class="day" style="grid-area: d2;">a</div>
+          <div id="d2" class="day" style="grid-area: d3;">a</div>
+          <div id="d3" class="day" style="grid-area: d4;">a</div>
+          <div id="d4" class="day" style="grid-area: d5;">a</div>
+          <div id="d5" class="day" style="grid-area: d6;">a</div>
+          <div id="d6" class="day" style="grid-area: d7;">a</div>
+          <div id="timeline-lines" style="grid-area: eee;">
+            <div class="timeline-container" style="grid-template-areas: 'n n n active active active m';">
+              <div class="timeline-line"></div>
+            </div>
+          </div>
+        </div>
+        <div id="links">
+          <a href="https://www.google.com" target="_blank"><div><img src="https://github.com/Tuestech/images/raw/main/Dashboard_Icon.png"><p>asdfasdf</p></div></a>
+        </div>
+      </div>
+      <div id = "tasks body" class="tasks main">
+				<header>Tasks</header>
+				<div class="container">
+					<div class="labels">
+						<p>Name</p>
+						<p>Time</p>
+						<p>Progress</p>
+					</div>
+					<div id="tasks-items" class="items">
+						<div class="item">
+							<div class="task">
+								<a>this</a>
+								<div class="time">3 days left</div>
+								<div onwheel="scrollslide(event)" class="progress-container"><div class="progress-bar"></div></div>
+							</div>
+							<img src="https://github.com/Tuestech/images/raw/main/Edit_Button.png" class="pencil">
+							<img src="https://github.com/Tuestech/images/raw/main/Delete_Button.png" class="delete">
+						</div>
+					</div>
+				</div>
+				<div id="edit-overlay" class="edit" style="display: none;">
+					<div class="alert">
+						<div class="inputs">
+							<input type="text" class="input" style="grid-area: name;"></input><p style="grid-area: name-label">Task Name</p>
+							<input type="date" class="input" style="grid-area: start;"></input><p style="grid-area: start-label">Start Date</p>
+							<input type="date" class="input" style="grid-area: due;"></input><p style="grid-area: due-label">Due Date</p>
+							<input type="text" class="input" style="grid-area: link;"></input><p style="grid-area: link-label">Link</p>
+						</div>
+						<div class="buttons">
+							<button class="delete" id="edit-delete">Delete</button>
+							<div></div>
+							<button class="cancel" onclick="closeOverlay()">Cancel</button>
+							<button class="ok">OK</button>
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+    <?!= include('Javascript'); ?>
+  </body>
+</html>
