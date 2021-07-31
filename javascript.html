@@ -325,6 +325,13 @@
     }
   }
   function editButton(index) {
+    // Set edit panel values to existing values in data
+    document.getElementById("name-input").value = data[index][0]
+    document.getElementById("start-input").value = new Date(data[index][1])
+    document.getElementById("due-input").value = new Date(data[index][2])
+    document.getElementById("link-input").value = data[index][5]
+
+    // Bind buttons with correct functions and indices
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
     document.getElementById("edit-delete").setAttribute("onclick", "deleteTask("+index+")")
     document.getElementById("edit-delete").onclick = function() {
@@ -339,7 +346,7 @@
     name = document.getElementById("name-input").value
     start = document.getElementById("start-input").value
     due = document.getElementById("due-input").value
-    link = document.getElementById("name-input").value
+    link = document.getElementById("link-input").value
 
     if ((name == "")||(start == "")||(due == "")) {
       alert("Please fill all required fields. (Link is not required)")
