@@ -1,0 +1,370 @@
+<script>
+  // Array
+  Array.prototype.remove = function(index) {
+    if (this.length-1 == index) {
+      this.pop()
+    } else {
+      var back = this.slice(0, index)
+      var front = this.slice(index+1)
+    }
+    return this
+  }
+  // Pagination
+  var page = "dash"
+  // Data Storage
+  var data = null;
+  var linkdata = "a";
+  function encrypt(input) {
+    var output = ""
+    var row;
+    for (row of input) {
+      var item;
+      for (item of row) {
+        output = output + item + "{item}"
+      }
+      output = output + "{list}"
+    }
+    return output
+  }
+  function decrypt(input) {
+    if (input == null) {
+      return null;
+    }
+    var output = []
+    var taskout = []
+    var linkout = []
+    var temp = input.split("{divider}")
+    var linkdata = temp[1].split("{list}")
+    var taskdata = temp[0].split("{list}")
+    var row;
+    for (row of taskdata) {
+      taskout.push(0)
+      taskout[taskout.length - 1] = clean(row.split("{item}",6))
+    }
+    for (row of linkdata) {
+      linkout.push(0)
+      linkout[linkout.length - 1] = clean(row.split("{item}",2))
+    }
+    output = [clean(taskout), clean(linkout)]
+    if (clean(output)==[]) {
+      return [[["Create a new task", new Date(), new Date(), 5, 50, "link.com"]]]
+    }
+    return clean(output)
+  }
+  function clean(input) {
+    var output = []
+    var item;
+    for (item of input) {
+      if ((item != "")&&(item != [])&&(item != null)&&(item != [,])) {
+        output.push(item)
+      }
+    }
+    return output
+  }
+  function getData() {
+    google.script.run.withSuccessHandler(onSuccess).getData()
+    function onSuccess(value) {
+      var decrypted = decrypt(value)
+      data = decrypted[0]
+      linkdata = decrypted[1]
+    }
+  }
+  function setData() {
+    google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata))
+  }
+  function startup() {
+    google.script.run.withSuccessHandler(onSuccess).getData()
+    function onSuccess(value) {
+      var decrypted = decrypt(value)
+      data = decrypted[0]
+      linkdata = decrypted[1]
+      showPage()
+      updateDashboard()
+      document.getElementById("loading").style.opacity = 0;
+      setTimeout(function(){document.getElementById("loading").style.zIndex = -999}, 1500);
+    }
+  }
+
+  // Pages
+  function hideAll() {
+    document.getElementById("dash body").setAttribute("style", "display: none")
+    document.getElementById("tasks body").setAttribute("style", "display: none")
+  }
+  function showPage() {
+    hideAll()
+    if (page == "dash") {
+      document.getElementById("dash body").setAttribute("style", "display: grid")
+      updateDashboard()
+    } else if (page == "tasks") {
+      document.getElementById("tasks body").setAttribute("style", "display: grid")
+      updateTasks()
+    }
+  }
+  function setPage(name) {
+    page = name
+    showPage()
+  }
+
+  // Javascript date objects are bad
+  function getDate() {
+    var today = new Date()
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    var day = days[today.getUTCDay()]
+    var year = today.getFullYear()
+    var month = today.getMonth()
+    var date = today.getUTCDate()
+    return [day, month, date, year]
+  }
+  function clearDate(date) {
+    var output = date
+    output.setMilliseconds(0)
+    output.setSeconds(0)
+    output.setMinutes(0)
+    output.setHours(0)
+    return output
+  }
+  function daysBetween(datea, dateb) {
+    var datea = clearDate(datea).valueOf()
+    var dateb = clearDate(dateb).valueOf()
+    return Math.floor((datea-dateb)/86400000)
+  }
+  function isBetween(date, datea, dateb) {
+    if ((daysBetween(date, datea)>=0)&&(daysBetween(dateb, date)>=0)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  // Updates
+  var needUpdate = false
+  var forceReady = true
+  var forceRequest = false
+  var updateCycle = setInterval(update, 3000)
+  function update() {
+    console.log("Update Cycle")
+    if (needUpdate) {
+      setData()
+      needUpdate = false
+      forceReady = false
+      setTimeout(forceCheck, 100)
+    }
+  }
+  function forceCheck() {
+    if (forceRequest) {
+      setData()
+      forceRequest = false
+    }
+    forceReady = true
+  }
+  function forceUpdate() {
+    if (forceReady) {
+      setData()
+      forceReady = false
+      setTimeout(forceReady = true, 100)
+    } else {
+      forceRequest = true
+    }
+  }
+
+  // Calculation
+  function score(task) {
+    return task[4]
+  }
+
+  // Dashboard
+  function updateDashboard() {
+    setToday()
+    setTimeline()
+    setLinks()
+    fade("today", 0)
+    fade("timeline", 100)
+    fade("links", 200)
+    page = "dash"
+  }
+  function fade(id, delay) {
+    document.getElementById(id).style.animation="0s hidden forwards"
+    setTimeout(function() {document.getElementById(id).style.animation="1s fade-in backwards"}, delay)
+    setTimeout(function() {document.getElementById(id).style.animation="idle"}, 1000+delay)
+  }
+  function setToday() {
+    var output = ""
+    var date = getDate()
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    var colors = ["#F4CCCC", "#FFE599", "#CFE2F3", "#D9EAD3"] //[red, yellow, blue, green]
+    document.getElementById("date").innerText = date[0] + ", " + months[date[1]] + " " + date[2]
+    for (var i = 0; i<data.length; i++) {
+      var task = data[i]
+      var color;
+      if (task[4] != 100) {
+        output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'>✔</label></div>"
+      } else  {
+        output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
+      }
+      if (score(task) <= 40) {
+        color = colors[0]
+      } else if (score(task) <= 80) {
+        color = colors[1]
+      } else if (score(task) <= 99) {
+        color = colors[2]
+      } else {
+        color = colors[3]
+      }
+      output = output + "<div id = 'task-name'><a href='" + task[5] + "' target='_blank'>" + task[0] + "</a><div style='background-color: " + color + ";'></div></div>"
+    }
+    if (output == "") {
+      output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
+      output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
+    }
+    document.getElementById("list").innerHTML = output
+  }
+  function todayButton(index) {
+    var checked = document.getElementById("todaybutton"+index).checked
+    if (checked) {
+      data[index][4] = 100
+    } else {
+      data[index][4] = 0
+    }
+    forceUpdate()
+    setToday()
+    setTimeline()
+  }
+  function setTimeline() {
+    var output = ""
+    var date = getDate()
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    var today = new Date()
+    var index = today.getDay()
+    for (var i = 0; i<7; i++) {
+      document.getElementById("d"+i).innerText = days[index+i]
+    }
+    for (var i = 0; i<data.length; i++) {
+      var task = data[i]
+      var line = "<div class= 'timeline-container' style=\"grid-template-areas: '"
+      var day = clearDate(new Date())
+      var activated = false
+      var overdue = false
+      var checkday = clearDate(new Date())
+      checkday.setDate(day.getDate()-1)
+      var left = isBetween(checkday, new Date(task[1]), new Date(task[2]))
+      checkday = clearDate(new Date())
+      checkday.setDate(day.getDate()+8)
+      var right = isBetween(checkday, new Date(task[1]), new Date(task[2]))
+      for (var j = 0; j<7; j++) {
+        console.log(daysBetween(new Date(task[2]), new Date()))
+        if ((daysBetween(new Date(task[2]), new Date()) < 0) && (task[4] != 100)) {
+          console.log("aaa")
+          line = line + "active m m m m m m"
+          overdue = true
+          break
+        }
+        if (isBetween(day, new Date(task[1]), new Date(task[2]))) {
+          line = line + "active "
+          activated = true
+        } else if (activated) {
+          line = line + "m "
+        } else {
+          line = line + "n "
+        }
+        day.setDate(day.getDate() + 1)
+      }
+      line = line + "';\"><div class='timeline-line"
+      if (right) {
+        line = line + " right-over"
+      }
+      if (left) {
+        line = line + " left-over"
+      }
+      if (!activated && task[4] != 100) {
+        line = line + " overdue"
+      }
+      line = line + "'><p>"+task[0]+"</p></div></div>"
+      if (activated || overdue) {
+        output = output + line
+      }
+    }
+    if (output == "") {
+      output = "<p id='alldone'>All done!</p>"
+    }
+    document.getElementById("timeline-lines").innerHTML = output;
+  }
+  function setLinks() {
+    var websiteImage = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
+    var images = ["https://cdn.worldvectorlogo.com/logos/google-classroom.svg", "https://help.powerschool.com/html/@7CEBA9EC6AB5B49E43B3D1241F8392F1/assets/ps_logo_lg.png"]
+    var names = ["Google Classroom", "Powerschool"]
+    var links = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
+    var output = ""
+    function generate(image, name, link) {
+      return "<a href='" + link + "' target='_blank'><div><img src='" + image + "'><p>" + name + "</p></div></a>"
+    }
+    for (var i=0; i<images.length; i++) {
+      output = output + generate(images[i], names[i], links[i])
+    }
+    for (var i=0; i<linkdata.length; i++) {
+      output = output + generate(websiteImage, linkdata[i][1], linkdata[i][0])
+    }
+    document.getElementById("links").innerHTML = output
+  }
+  // Tasks
+  function updateTasks() {
+    var output = ""
+    for (var i=0; i<data.length; i++) {
+      task = data[i]
+      days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
+      dayString = days + " days left"
+      if (days < 0) {
+        dayString = "Overdue!"
+      }
+      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event)' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/Edit_Button.png' class='pencil'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/Delete_Button.png' class='delete'></div>"
+    }
+    document.getElementById("tasks-items").innerHTML = output
+    for (var i=0; i<data.length; i++) {
+      task = data[i]
+      document.getElementById("task-progress-bar"+i).style.setProperty("--progress", task[4]+"%")
+    }
+  }
+  function editButton(index) {
+    document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
+    document.getElementById("edit-overlay").setAttribute("onclick", "deleteTask("+index+")")
+    document.getElementById("edit-delete").onclick = function() {
+      deleteTask(index);
+    }
+  }
+  function closeOverlay() {
+    document.getElementById("edit-overlay").setAttribute("style", "display: none;")
+  }
+  function deleteTask(index) {
+    data = data.remove(index)
+    updateTasks()
+    forceUpdate()
+    closeOverlay()
+  }
+  function scrollslide(event) {
+    var y = event.deltaY;
+    var currentSize;
+    if (event.target.childElementCount > 0) {
+      currentSize = getComputedStyle(event.target.firstElementChild).getPropertyValue("--progress");
+    } else {
+      currentSize = getComputedStyle(event.target).getPropertyValue("--progress");
+    }
+    currentSize.replace("%", "")
+    if (y > 0) {
+      newSize = parseInt(currentSize) - 5;
+    } else {
+      newSize = parseInt(currentSize) + 5;
+    }
+    if (newSize < 0) {
+      newSize = 0
+    } else if (newSize > 100) {
+      newSize = 100
+    }
+    if (event.target.childElementCount > 0) {
+      event.target.firstElementChild.style.setProperty("--progress", newSize+"%");
+    } else {
+      event.target.style.setProperty("--progress", newSize+"%");
+    }
+  }
+  // Run
+  startup()
+</script>
