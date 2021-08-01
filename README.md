@@ -1,5 +1,5 @@
 # Tuesday
-Tuesday is a tool for work management.
+Tuesday is a smart work management tool that helps you keep track of your tasks, and uses smart algorithms to help you prioritize your work.
 
 ## Table of contents
 
