@@ -1,15 +1,15 @@
-Thanks for dropping by our code repository! This is the repo where issues and pull requests will be handled for all of Tuesday.
+# Tuesday
+Tuesday is a tool for work management.
 
-# Table of contents
+## Table of contents
 
 [Reporting bugs](#Reporting-bugs)
 
 [Suggesting features](#Suggesting-features)
 
 [Contributing](#Contributing)
-
+ - [Testing setup](#Testing-setup)
  - [Using Github](#Using-Github)
-  
  - [Pull requests](#Pull-requests)
 
 &nbsp;
@@ -42,6 +42,21 @@ After a suggestion is submited, you can track out progress and see your idea com
 
 ## Contributing
 
+### Testing setup
+
+This is designed to be run in a Google Apps Script(GAS) web-app.
+
+Copy all the files to the GAS project.
+Note that all file names must be capitalized for the scriptlets to work.
+
+When deploying, select web-app. Once deployed, you can use the versioned deployment or the test deployment.
+
+We recommend using the test deployment when testing and debugging. Test deployments run from the most recently saved file, while versioned deployments will only run the files in the state that they were in when deployed.
+
+[GAS web-app docs](https://developers.google.com/apps-script/guides/web?hl=en)
+
+&nbsp;
+
 ### Using Github
 
 If you're already familiar with Github, you can fork this repository and make a pull request with your changes.
@@ -58,10 +73,12 @@ If you want to contribute but don't know how to use Github, we can help! Follow 
 
 **Done!** Once your pull request is submited, we will handle the rest.
 
+&nbsp;
+
 ### Pull requests
 
 The title of a pull request should briefly describe your changes at a high level.
-If you added a button in the dashboard, just put *Added a {what the button does} button to dashboard*
+If you added a button in the dashboard, just put `Added a {what the button does} button to dashboard`
 
 The description of a pull request should explain why something was added, removed, or changed.
 This time, you can include any other information you think necessary.
