@@ -12,6 +12,8 @@ Tuesday is a smart work management tool that helps you keep track of your tasks,
  - [Using Github](#Using-Github)
  - [Pull requests](#Pull-requests)
 
+[License](#License)
+
 &nbsp;
 
 ## Reporting bugs
@@ -88,3 +90,22 @@ If your pull request addresses an issue, be sure to provide a link to the issue 
 Sometimes, your pull request may not be up to our standards.
 Don't worry, we will always explain what was wrong and how it can be fixed.
 You can always submit another pull request
+
+## License
+
+Tuesday - Work management tool for students, by students
+
+Copyright (C) 2021 USSiamaboat & Edison946
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
