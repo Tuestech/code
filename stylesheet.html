@@ -334,12 +334,16 @@
   /* Timeline */
   .timeline-container {
     display: grid;
+    overflow: hidden;
     margin: 10px 0px;
     gap: 5px;
     grid-template-columns: repeat(7, minmax(30px, 1fr));
   }
+  #timeline-lines {
+    background-color: #F3F3F3;
+  }
   .timeline-line {
-    border-radius: 100px;
+    border-radius: 10px;
     margin: 0px 10px;
     width: 100%;
     background-color: #CFE2F3;
@@ -368,7 +372,7 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     margin-left: 0px;
-    background-color: #E06666;
+    background-color: #E87070;
   }
   /* Dashboard */
   header {
@@ -449,13 +453,11 @@
     padding: 10px;
     text-align: center;
     font-weight: bold;
-    background-color: #6D9EEB;
+    background-color: #9FC5E8;
   }
   .dash #task-name {
     display: grid;
-    grid-template-areas: 'name spacer status';
-    grid-template-columns: min-content auto min-content;
-    border-radius: 100px;
+    border-radius: 10px;
     height: 40px;
     margin: 10px;
     box-shadow:0px 0px 70px 0px #a2afbb; 
@@ -496,7 +498,7 @@
     display: grid;
     padding: 5px;
     grid-template-columns: 50px min-content;
-    border-radius: 100px;
+    border-radius: 10px;
     height: 30px;
     width: min-content;
     background-color: #CFE2F3;
