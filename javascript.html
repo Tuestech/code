@@ -1,4 +1,7 @@
 <script>
+  // Settings
+  var scoreType = 0
+
   // Array
   Array.prototype.remove = function(index) {
     if (this.length-1 == index) {
@@ -9,10 +12,13 @@
     }
     return this
   }
+
   // Pagination
   var page = "dash"
-  // Data Storage
+  
+  // Data Management
   var data = null;
+  var sorted = null
   var linkdata = "a";
   function encrypt(input) {
     var output = ""
@@ -71,6 +77,19 @@
   }
   function setData() {
     google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata))
+  }
+  function setScores() {
+    var task;
+    for (task of data) {
+      task[3] = score(task)
+    }
+  }
+  function sortData() {
+    setScores()
+    var output = [...data]
+    output.sort((a, b) => b[3] - a[3])
+    sorted = output
+    return output
   }
   function startup() {
     google.script.run.withSuccessHandler(onSuccess).getData()
@@ -169,11 +188,25 @@
 
   // Calculation
   function score(task) {
-    return task[4]
+    // Set coefficient and exponent
+    var coef = 100
+    var exp = 0.5
+    if (scoreType == 1) {
+      coef = 1
+      exp = 1
+    }
+    // Math
+    var prog = daysBetween(new Date(), new Date(task[1]))/daysBetween(new Date(task[2]), new Date(task[1]))
+    if (prog < 0) {
+      return 0
+    } else {
+      return (coef*prog)^exp
+    }
   }
 
   // Dashboard
   function updateDashboard() {
+    sortData()
     setToday()
     setTimeline()
     setLinks()
@@ -191,21 +224,21 @@
     var output = ""
     var date = getDate()
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    var colors = ["#F4CCCC", "#FFE599", "#CFE2F3", "#D9EAD3"] //[red, yellow, blue, green]
+    var colors = ["#F4CCCC", "#FFE599", "#CFE2F3", "#D9EAD3"] // [red, yellow, blue, green]
     document.getElementById("date").innerText = date[0] + ", " + months[date[1]] + " " + date[2]
-    for (var i = 0; i<data.length; i++) {
-      var task = data[i]
+    for (var i = 0; i<sorted.length; i++) {
+      var task = sorted[i]
       var color;
       if (task[4] != 100) {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'>✔</label></div>"
       } else  {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
       }
-      if (score(task) <= 40) {
+      if (task[3] <= 40) {
         color = colors[0]
-      } else if (score(task) <= 80) {
+      } else if (task[3] <= 80) {
         color = colors[1]
-      } else if (score(task) <= 99) {
+      } else if (task[3] <= 99) {
         color = colors[2]
       } else {
         color = colors[3]
@@ -214,7 +247,7 @@
     }
     if (output == "") {
       output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
-      output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
+      output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example task" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
     }
     document.getElementById("list").innerHTML = output
   }
@@ -239,8 +272,8 @@
     for (var i = 0; i<7; i++) {
       document.getElementById("d"+i).innerText = days[index+i]
     }
-    for (var i = 0; i<data.length; i++) {
-      var task = data[i]
+    for (var i = 0; i<sorted.length; i++) {
+      var task = sorted[i]
       var line = "<div class= 'timeline-container' style=\"grid-template-areas: '"
       var day = clearDate(new Date())
       var activated = false
@@ -252,9 +285,7 @@
       checkday.setDate(day.getDate()+8)
       var right = isBetween(checkday, new Date(task[1]), new Date(task[2]))
       for (var j = 0; j<7; j++) {
-        console.log(daysBetween(new Date(task[2]), new Date()))
         if ((daysBetween(new Date(task[2]), new Date()) < 0) && (task[4] != 100)) {
-          console.log("aaa")
           line = line + "active m m m m m m"
           overdue = true
           break
@@ -306,6 +337,7 @@
     }
     document.getElementById("links").innerHTML = output
   }
+
   // Tasks
   function updateTasks() {
     var output = ""
@@ -397,6 +429,7 @@
       event.target.style.setProperty("--progress", newSize+"%");
     }
   }
+
   // Run
   startup()
 </script>
