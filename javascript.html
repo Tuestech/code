@@ -159,7 +159,7 @@
   var needUpdate = false
   var forceReady = true
   var forceRequest = false
-  var updateCycle = setInterval(update, 3000)
+  var updateCycle = setInterval(update, 180000)
   function update() {
     console.log("Update Cycle")
     if (needUpdate) {
@@ -184,6 +184,14 @@
     } else {
       forceRequest = true
     }
+  }
+  function unload() {
+    console.log("Page Closed")
+    if (needUpdate) {
+      console.log("Update required")
+      setData()
+    }
+    console.log("Unloaded")
   }
 
   // Calculation
@@ -350,7 +358,7 @@
       if (days < 0) {
         dayString = "Overdue!"
       }
-      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event)' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/Edit_Button.png' class='pencil'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/Delete_Button.png' class='delete'></div>"
+      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/Edit_Button.png' class='pencil'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/Delete_Button.png' class='delete'></div>"
     }
     document.getElementById("tasks-items").innerHTML = output
     for (var i=0; i<data.length; i++) {
@@ -406,9 +414,10 @@
     forceUpdate()
     closeOverlay()
   }
-  function scrollslide(event) {
+  function scrollslide(event, index) {
     var y = event.deltaY;
     var currentSize;
+    var newSize;
     if (event.target.childElementCount > 0) {
       currentSize = getComputedStyle(event.target.firstElementChild).getPropertyValue("--progress");
     } else {
@@ -425,11 +434,16 @@
     } else if (newSize > 100) {
       newSize = 100
     }
+    var element;
     if (event.target.childElementCount > 0) {
       event.target.firstElementChild.style.setProperty("--progress", newSize+"%");
+      element = event.target.firstElementChild
     } else {
       event.target.style.setProperty("--progress", newSize+"%");
+      element = event.target
     }
+    data[index][4] = newSize
+    needUpdate = true
   }
 
   // Run
