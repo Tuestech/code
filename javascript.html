@@ -196,6 +196,7 @@
 
   // Calculation
   function score(task) {
+    console.log("score was called")
     if (task[4] == 100) {
       return -999
     }
@@ -208,11 +209,13 @@
     }
     // Math
     var prog = daysBetween(new Date(), new Date(task[1]))/daysBetween(new Date(task[2]), new Date(task[1]))
+    var expected;
     if (prog < 0) {
-      return 0
+      expected = 0
     } else {
-      return (coef*prog)^exp
+      expected = (coef*prog)^exp
     }
+    return expected - task[4]
   }
 
   // Dashboard
