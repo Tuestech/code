@@ -351,6 +351,7 @@
   // Tasks
   function updateTasks() {
     var output = ""
+    var newButton = "<img src='https://github.com/Tuestech/images/raw/main/New%20Button.png' class='new-button' onclick='newTask()'>"
     for (var i=0; i<data.length; i++) {
       task = data[i]
       days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
@@ -358,12 +359,24 @@
       if (days < 0) {
         dayString = "Overdue!"
       }
-      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/Edit_Button.png' class='pencil'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/Delete_Button.png' class='delete'></div>"
+      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
     }
-    document.getElementById("tasks-items").innerHTML = output
+    document.getElementById("tasks-items").innerHTML = output + newButton
     for (var i=0; i<data.length; i++) {
       task = data[i]
       document.getElementById("task-progress-bar"+i).style.setProperty("--progress", task[4]+"%")
+    }
+  }
+  function newTask() {
+    document.getElementById("name-input").value = ""
+    document.getElementById("start-input").value = ""
+    document.getElementById("due-input").value = ""
+    document.getElementById("link-input").value = ""
+
+    document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
+    document.getElementById("ok").setAttribute("onclick", "okButton("+data.length+")")
+    document.getElementById("ok").onclick = function() {
+      okButton(data.length);
     }
   }
   function editButton(index) {
@@ -394,12 +407,18 @@
       alert("Please fill all required fields. (Link is not required)")
       return
     }
+    
+    if (typeof data[index] === "undefined") {
+      data[index] = ["", "", "", "", 0, ""]
+    }
 
     data[index][0] = name
     data[index][1] = new Date(start)
     data[index][2] = new Date(due)
     if (link != "") {
       data[index][5] = link
+    } else {
+      data[index][5] = ""
     }
     forceUpdate()
     closeOverlay()
