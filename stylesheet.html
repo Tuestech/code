@@ -58,6 +58,7 @@
     height: 270px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
   }
   #loading h1 {
     text-align: center;
@@ -94,7 +95,7 @@
       'set';
     grid-template-rows: min-content repeat(2, minmax(50px, min-content)) auto minmax(50px, min-content);
   }
-  .nav-list{
+  .nav-list {
     width: 100%;
   }
   .nav-item {
@@ -114,11 +115,13 @@
   }
   .nav #logo {
     display: block;
-    width: 50%;
-    margin-left: 25%;
-    margin-right: 25%;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
     margin-bottom: 10px;
     grid-area: logo;
+    padding-bottom: 20px;
   }
   .nav-item:hover img{
     opacity: 40%
@@ -144,10 +147,12 @@
   }
   header {
     grid-area: header;
-    font-weight: 500;
+    font-weight: bold;
     font-family: Lexend;
     font-size: 45px;
+    color: #434343;
     margin: 0px 20px;
+    padding-top: 10px;
   }
 
   /* Date Input */
@@ -191,7 +196,7 @@
     overflow: hidden;
     padding: 0;
     height: var(--height);
-    border-radius: 999px;
+    border-radius: 10px;
     border: solid #CCCCCC var(--border);
     background: #CCCCCC;
   }
@@ -206,7 +211,7 @@
     transform: translate(calc(-1*(100% - var(--progress))));
     height: 100%;
     width: calc(100% + (2 * var(--border)));
-    background: #CFE2F3;
+    background: #3D85C6;
   }
 
   /* Toggle Button */
@@ -334,12 +339,16 @@
   /* Timeline */
   .timeline-container {
     display: grid;
+    overflow: hidden;
     margin: 10px 0px;
     gap: 5px;
     grid-template-columns: repeat(7, minmax(30px, 1fr));
   }
+  #timeline-lines {
+    background-color: #F3F3F3;
+  }
   .timeline-line {
-    border-radius: 100px;
+    border-radius: 10px;
     margin: 0px 10px;
     width: 100%;
     background-color: #CFE2F3;
@@ -368,7 +377,7 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     margin-left: 0px;
-    background-color: #E06666;
+    background-color: #E87070;
   }
   /* Dashboard */
   header {
@@ -449,13 +458,12 @@
     padding: 10px;
     text-align: center;
     font-weight: bold;
-    background-color: #6D9EEB;
+    color: white;
+    background-color: #3D85C6;
   }
   .dash #task-name {
     display: grid;
-    grid-template-areas: 'name spacer status';
-    grid-template-columns: min-content auto min-content;
-    border-radius: 100px;
+    border-radius: 10px;
     height: 40px;
     margin: 10px;
     box-shadow:0px 0px 70px 0px #a2afbb; 
@@ -473,6 +481,7 @@
     font-family: Lexend;
     font-size: 20px;
     margin: 5px 15px;
+    white-space: nowrap;
   }
   .dash #links {
     display: grid;
@@ -495,7 +504,7 @@
     display: grid;
     padding: 5px;
     grid-template-columns: 50px min-content;
-    border-radius: 100px;
+    border-radius: 10px;
     height: 30px;
     width: min-content;
     background-color: #CFE2F3;
@@ -537,10 +546,11 @@
     display: grid;
     grid-template-columns: auto 170px 200px 100px;
     font-family: Lexend;
-    background-color: #A4C2F4;
+    background-color: #6FA8DC;
     grid-area: labels;
     margin: 10px;
-    padding: 10px 10px;
+    margin-bottom: 0px;
+    padding: 15px 10px;
   }
   .tasks .labels p {
     font-size: 25px;
@@ -554,26 +564,38 @@
     grid-auto-flow: row;
     grid-auto-rows: min-content;
     margin: 10px;
+    padding-top: 5px;
   }
   .tasks .items .item {
     display: grid;
     margin: 5px 10px;
-    height: 50px;
+    height: 40px;
     font-family: Lexend;
-    grid-template-areas: 'task edit delete';
     grid-template-columns: auto 50px 50px;
+    border-radius: 10px;
+    background-color: #CFE2F3;
+  }
+  .tasks .items .item .task-delete {
+    opacity: 0%;
+  }
+  .tasks .items .item:hover .task-delete {
+    opacity: 60%;
+  }
+  .tasks .items .item .task-delete:hover {
+    opacity: 40%;
+  }
+  .tasks .items .item .task-edit:hover {
+    opacity: 80% !important;
   }
   .tasks .items .item .task {
     display: grid;
     align-content: center;
     grid-template-columns: auto 170px 200px;
-    border-radius: 999px;
-    border: solid #000000 2px;
   }
   .tasks .items .item .task a {
     margin: 0px 20px;
     width: calc(100% - 40px);
-    font-size: 30px;
+    font-size: 25px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -582,8 +604,8 @@
     display: grid;
     align-content: center;
     justify-content: center;
-    border-radius: 999px;
-    font-size: 25px;
+    border-radius: 10px;
+    font-size: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     background-color: #93C47D;
@@ -591,13 +613,19 @@
   .tasks .items .item .task .progress-container {
     align-self: stretch;
   }
-  .tasks .items img {
-    height: 50px;
-    width: 50px;
+  .tasks .items .item img {
+    height: 30px;
+    width: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
     cursor: pointer;
   }
-  .tasks .items img:hover {
-    opacity: 80%;
+  .tasks .new-button {
+    height: 40px;
+    width: 40px;
+    margin: 5px 10px;
+    cursor: pointer;
   }
   .tasks .edit {
     position: absolute;
