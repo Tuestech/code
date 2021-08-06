@@ -1,4 +1,7 @@
 <script>
+  // Settings
+  var scoreType = 0
+
   // Array
   Array.prototype.remove = function(index) {
     if (this.length-1 == index) {
@@ -9,10 +12,13 @@
     }
     return this
   }
+
   // Pagination
   var page = "dash"
-  // Data Storage
+  
+  // Data Management
   var data = null;
+  var sorted = null
   var linkdata = "a";
   function encrypt(input) {
     var output = ""
@@ -71,6 +77,19 @@
   }
   function setData() {
     google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata))
+  }
+  function setScores() {
+    var task;
+    for (task of data) {
+      task[3] = score(task)
+    }
+  }
+  function sortData() {
+    setScores()
+    var output = [...data]
+    output.sort((a, b) => b[3] - a[3])
+    sorted = output
+    return output
   }
   function startup() {
     google.script.run.withSuccessHandler(onSuccess).getData()
@@ -140,7 +159,7 @@
   var needUpdate = false
   var forceReady = true
   var forceRequest = false
-  var updateCycle = setInterval(update, 3000)
+  var updateCycle = setInterval(update, 180000)
   function update() {
     console.log("Update Cycle")
     if (needUpdate) {
@@ -166,14 +185,39 @@
       forceRequest = true
     }
   }
+  function unload() {
+    console.log("Page Closed")
+    if (needUpdate) {
+      console.log("Update required")
+      setData()
+    }
+    console.log("Unloaded")
+  }
 
   // Calculation
   function score(task) {
-    return task[4]
+    if (task[4] == 100) {
+      return -999
+    }
+    // Set coefficient and exponent
+    var coef = 100
+    var exp = 0.5
+    if (scoreType == 1) {
+      coef = 1
+      exp = 1
+    }
+    // Math
+    var prog = daysBetween(new Date(), new Date(task[1]))/daysBetween(new Date(task[2]), new Date(task[1]))
+    if (prog < 0) {
+      return 0
+    } else {
+      return (coef*prog)^exp
+    }
   }
 
   // Dashboard
   function updateDashboard() {
+    sortData()
     setToday()
     setTimeline()
     setLinks()
@@ -191,41 +235,40 @@
     var output = ""
     var date = getDate()
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    var colors = ["#F4CCCC", "#FFE599", "#CFE2F3", "#D9EAD3"] //[red, yellow, blue, green]
+    var colors = ["#E87070", "#FFD450", "#D9D9D9"] // [red, yellow, gray]
     document.getElementById("date").innerText = date[0] + ", " + months[date[1]] + " " + date[2]
-    for (var i = 0; i<data.length; i++) {
-      var task = data[i]
+    for (var i = 0; i<sorted.length; i++) {
+      var task = sorted[i]
       var color;
       if (task[4] != 100) {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'>✔</label></div>"
       } else  {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
       }
-      if (score(task) <= 40) {
+      if (task[4] <= 40) {
         color = colors[0]
-      } else if (score(task) <= 80) {
+      } else if (task[4] < 100) {
         color = colors[1]
-      } else if (score(task) <= 99) {
-        color = colors[2]
       } else {
-        color = colors[3]
+        color = colors[2]
       }
-      output = output + "<div id = 'task-name'><a href='" + task[5] + "' target='_blank'>" + task[0] + "</a><div style='background-color: " + color + ";'></div></div>"
+      output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + task[5] + "' target='_blank'>" + task[0] + "</a></div>"
     }
     if (output == "") {
       output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
-      output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
+      output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example task" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
     }
     document.getElementById("list").innerHTML = output
   }
   function todayButton(index) {
     var checked = document.getElementById("todaybutton"+index).checked
     if (checked) {
-      data[index][4] = 100
+      sorted[index][4] = 100
     } else {
-      data[index][4] = 0
+      sorted[index][4] = 0
     }
     forceUpdate()
+    sortData()
     setToday()
     setTimeline()
   }
@@ -239,8 +282,8 @@
     for (var i = 0; i<7; i++) {
       document.getElementById("d"+i).innerText = days[index+i]
     }
-    for (var i = 0; i<data.length; i++) {
-      var task = data[i]
+    for (var i = 0; i<sorted.length; i++) {
+      var task = sorted[i]
       var line = "<div class= 'timeline-container' style=\"grid-template-areas: '"
       var day = clearDate(new Date())
       var activated = false
@@ -252,9 +295,7 @@
       checkday.setDate(day.getDate()+8)
       var right = isBetween(checkday, new Date(task[1]), new Date(task[2]))
       for (var j = 0; j<7; j++) {
-        console.log(daysBetween(new Date(task[2]), new Date()))
         if ((daysBetween(new Date(task[2]), new Date()) < 0) && (task[4] != 100)) {
-          console.log("aaa")
           line = line + "active m m m m m m"
           overdue = true
           break
@@ -306,9 +347,11 @@
     }
     document.getElementById("links").innerHTML = output
   }
+
   // Tasks
   function updateTasks() {
     var output = ""
+    var newButton = "<img src='https://github.com/Tuestech/images/raw/main/New%20Button.png' class='new-button' onclick='newTask()'>"
     for (var i=0; i<data.length; i++) {
       task = data[i]
       days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
@@ -316,15 +359,34 @@
       if (days < 0) {
         dayString = "Overdue!"
       }
-      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event)' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/Edit_Button.png' class='pencil'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/Delete_Button.png' class='delete'></div>"
+      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time'>"+dayString+"</div><div onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
     }
-    document.getElementById("tasks-items").innerHTML = output
+    document.getElementById("tasks-items").innerHTML = output + newButton
     for (var i=0; i<data.length; i++) {
       task = data[i]
       document.getElementById("task-progress-bar"+i).style.setProperty("--progress", task[4]+"%")
     }
   }
+  function newTask() {
+    document.getElementById("name-input").value = ""
+    document.getElementById("start-input").value = ""
+    document.getElementById("due-input").value = ""
+    document.getElementById("link-input").value = ""
+
+    document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
+    document.getElementById("ok").setAttribute("onclick", "okButton("+data.length+")")
+    document.getElementById("ok").onclick = function() {
+      okButton(data.length);
+    }
+  }
   function editButton(index) {
+    // Set edit panel values to existing values in data
+    document.getElementById("name-input").value = data[index][0]
+    document.getElementById("start-input").value = new Date(data[index][1])
+    document.getElementById("due-input").value = new Date(data[index][2])
+    document.getElementById("link-input").value = data[index][5]
+
+    // Bind buttons with correct functions and indices
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
     document.getElementById("edit-delete").setAttribute("onclick", "deleteTask("+index+")")
     document.getElementById("edit-delete").onclick = function() {
@@ -339,11 +401,15 @@
     name = document.getElementById("name-input").value
     start = document.getElementById("start-input").value
     due = document.getElementById("due-input").value
-    link = document.getElementById("name-input").value
+    link = document.getElementById("link-input").value
 
     if ((name == "")||(start == "")||(due == "")) {
       alert("Please fill all required fields. (Link is not required)")
       return
+    }
+    
+    if (typeof data[index] === "undefined") {
+      data[index] = ["", "", "", "", 0, ""]
     }
 
     data[index][0] = name
@@ -351,6 +417,8 @@
     data[index][2] = new Date(due)
     if (link != "") {
       data[index][5] = link
+    } else {
+      data[index][5] = ""
     }
     forceUpdate()
     closeOverlay()
@@ -365,9 +433,10 @@
     forceUpdate()
     closeOverlay()
   }
-  function scrollslide(event) {
+  function scrollslide(event, index) {
     var y = event.deltaY;
     var currentSize;
+    var newSize;
     if (event.target.childElementCount > 0) {
       currentSize = getComputedStyle(event.target.firstElementChild).getPropertyValue("--progress");
     } else {
@@ -384,12 +453,18 @@
     } else if (newSize > 100) {
       newSize = 100
     }
+    var element;
     if (event.target.childElementCount > 0) {
       event.target.firstElementChild.style.setProperty("--progress", newSize+"%");
+      element = event.target.firstElementChild
     } else {
       event.target.style.setProperty("--progress", newSize+"%");
+      element = event.target
     }
+    data[index][4] = newSize
+    needUpdate = true
   }
+
   // Run
   startup()
 </script>
