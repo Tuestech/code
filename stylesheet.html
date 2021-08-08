@@ -701,6 +701,181 @@
     background-color: #93C47D;
     margin-right: 20px;
   }
+
+  /* Settings */
+  .settings {
+    display: grid;
+    background-color: #ffffff;
+    gap: 10px;
+    grid-template-areas: 
+      'header header'
+      'curves links'
+      'other links';
+    grid-template-rows: min-content auto min-content;
+    grid-template-columns: min-content 1fr;
+    color: black;
+  }
+  .settings .settings-panel {
+    background-color: #F3F3F3;
+    font-family: "Lexend";
+    padding: 10px;
+  }
+  .settings .settings-panel h2{
+    font-weight: normal;
+    font-size: 23px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-weight: 500;
+  }
+  .settings .curves {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content min-content min-content;
+    grid-template-areas:
+      'header header'
+      'a b'
+      'c d';
+    grid-area: curves;
+    margin-left: 10px;
+  }
+  .settings .curves .header {
+    grid-area: header;
+    display: grid;
+    grid-template-columns: auto min-content;
+  }
+  .settings .curves .question {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    border-radius: 50%;
+    border: solid 2px #434343;
+    text-align: center;
+    line-height: 15px;
+    font-weight: bold;
+    margin: auto;
+    cursor: default;
+  }
+  .settings .curves .question .tooltip {
+    position: absolute;
+    visibility: hidden;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 5px;
+  }
+  .settings .curves .question:hover .tooltip {
+    visibility: visible;
+  }
+  .settings .curves .curve {
+    display: grid;
+    grid-template-rows: min-content min-content;
+    cursor: pointer;
+  }
+  .settings .curves .curve:hover {
+    opacity: 80%;
+  }
+  .settings .curves .curve img {
+    width: 130px;
+    height: 130px;
+    margin: 10px;
+  }
+  .settings .curves .curve p {
+    margin-top: -10px;
+    font-size: 13px;
+  }
+  .settings .curves .curve {
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+  }
+  .settings .link-select {
+    grid-area: links;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .settings .other {
+    display: grid;
+    grid-template-rows: min-content min-content auto min-content;
+    grid-template-areas: 
+      'header header'
+      'p p'
+      'spacer spacer'
+      'delete view';
+    grid-area: other;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+  .settings .other h2 {
+    grid-area: header;
+  }
+  .settings .other p {
+    grid-area: p;
+    margin: 0px 10px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: lighter;
+  }
+  .settings .other button {
+    font-family: "Roboto";
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 17px;
+    border-radius: 7px;
+    padding: 5px;
+    margin: 5px 10px;
+    border: none;
+  }
+  .settings .other button:hover {
+    opacity: 80%;
+  }
+  .settings .other .delete-data {
+    background-color: #ED5E68;
+    grid-area: delete;
+  }
+  .settings .other .view-source {
+    background-color: #666666;
+    grid-area: view;
+  }
+  .settings .items {
+    display: grid;
+    background-color: #F3F3F3;
+    grid-area: items;
+    grid-auto-flow: row;
+    grid-auto-rows: min-content;
+    margin: 5px;
+    padding-top: 5px;
+  }
+  .settings .items .item {
+    display: grid;
+    margin: 5px 5px;
+    height: 40px;
+    font-family: Lexend;
+    grid-template-columns: 50px auto 50px 50px;
+    border-radius: 10px;
+    background-color: #CFE2F3;
+  }
+  .settings .items .item p {
+    margin: auto 10px;
+  }
+  .settings .items .item img {
+    height: 30px;
+    width: 30px;
+    margin: auto;
+    cursor: pointer;
+  }
+  .settings .items .item .link-edit:hover {
+    opacity: 80%;
+  }
+  .settings .items .item .link-delete {
+    opacity: 0%;
+  }
+  .settings .items .item:hover .link-delete {
+    opacity: 60%;
+  }
+  .settings .items .item .link-delete:hover {
+    opacity: 40%;
+  }
   @media screen and (max-width: 800px) {
     .dash {
       grid-template-areas:
