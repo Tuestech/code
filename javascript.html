@@ -20,6 +20,14 @@
   var data = null;
   var sorted = null
   var linkdata = "a";
+  function safeString(string) {
+    string = string.replaceAll('{list}', '(list)')
+    string = string.replaceAll('{item}', '(item)')
+    string = string.replaceAll('{divider}', '(divider)')
+    string = string.replaceAll('>', '&gt')
+    string = string.replaceAll('<', '&lt')
+    return string
+  }
   function encrypt(input) {
     var output = ""
     var row;
@@ -430,11 +438,11 @@
       data[index] = ["", "", "", "", 0, ""]
     }
 
-    data[index][0] = name
+    data[index][0] = safeString(name)
     data[index][1] = new Date(start)
     data[index][2] = new Date(due)
     if (link != "") {
-      data[index][5] = link
+      data[index][5] = safeString(link)
     } else {
       data[index][5] = ""
     }
