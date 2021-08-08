@@ -108,6 +108,7 @@
   function hideAll() {
     document.getElementById("dash body").setAttribute("style", "display: none")
     document.getElementById("tasks body").setAttribute("style", "display: none")
+    document.getElementById("settings body").setAttribute("style", "display: none")
   }
   function showPage() {
     hideAll()
@@ -117,6 +118,8 @@
     } else if (page == "tasks") {
       document.getElementById("tasks body").setAttribute("style", "display: grid")
       updateTasks()
+    } else if (page == "settings") {
+      document.getElementById("settings body").setAttribute("style", "display: grid")
     }
   }
   function setPage(name) {
@@ -361,6 +364,9 @@
       task = data[i]
       days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
       dayString = days + " days left"
+      if (days == 1) {
+        dayString = days + " day left"
+      }
       if (days < 0) {
         dayString = "Overdue!"
       }
@@ -394,8 +400,8 @@
   function editButton(index) {
     // Set edit panel values to existing values in data
     document.getElementById("name-input").value = data[index][0]
-    document.getElementById("start-input").value = new Date(data[index][1])
-    document.getElementById("due-input").value = new Date(data[index][2])
+    document.getElementById("start-input").valueAsDate = new Date(data[index][1])
+    document.getElementById("due-input").valueAsDate = new Date(data[index][2])
     document.getElementById("link-input").value = data[index][5]
 
     // Bind buttons with correct functions and indices
