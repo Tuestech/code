@@ -71,7 +71,9 @@ If you want to contribute but don't know how to use Github, we can help! Follow 
 
 **Step 2:** Make edits in your forked repo
 
-**Step 3:** Make a pull request (Navigate to `Pull requests` and create a new pull request. Make sure it follows the pull request guidelines.)
+**Step 3:** Make a pull request (Navigate to `Pull requests` and create a new pull request. Make sure it follows the 
+[pull request guidelines](###Pull-requests)
+.)
 
 **Done!** Once your pull request is submited, we will handle the rest.
 
