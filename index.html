@@ -22,7 +22,7 @@
         <img id = "logo" src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
         <div onclick="setPage('dash')" class="nav-item" id = "dash">
           <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Dashboard%20Icon.png"></a>
-          <a href="#" onclick="updateDashboard()" class="nav-link">Dashboard</a>
+          <a href="#" class="nav-link">Dashboard</a>
         </div>
         <div onclick="setPage('tasks')" class="nav-item" id = "tasks">
           <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Tasks%20Icon.png"></a>
@@ -111,35 +111,35 @@
 					<div class="header">
 						<h2>Progress Curve</h2>
 						<div class="question">?
-							<div class="tooltip">
-								<h3>What are progress curves?</h3>
-								Progress curves are a way of representing how much of a task is done over time.<br><br>
-								Options 1 and 3 means that you do more work earlier on while still making steady progress until the due date. Option 3 is more aggressively ahead of schedule.<br><br>
-								Option 2 means that you do the same amount of work every day until the due date.<br><br>
-								Do not pick option 4.
-							</div>
+              <div class="tooltip">
+                <h3>What are progress curves?</h3>
+                Progress curves are a way of representing how much of a task is done over time.<br><br>
+                Options 1 and 3 means that you do more work earlier on while still making steady progress until the due date. Option 3 is more aggressively ahead of schedule.<br><br>
+                Option 2 means that you do the same amount of work every day until the due date.<br><br>
+                Do not pick option 4.
+              </div>
 						</div>
 					</div>
 					<div class="curve">
-						<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%201%20blue.png">
+						<img onclick="setScoreType(0)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%201%20blue.png">
 						<p>1. Recommended</p>
 					</div>
 					<div class="curve">
-						<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%202%20blue.png">
+						<img onclick="setScoreType(1)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%202%20blue.png">
 						<p>2. Average</p>
 					</div>
 					<div class="curve">
-						<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%203%20blue.png">
+						<img onclick="setScoreType(2)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%203%20blue.png">
 						<p>3. Get Ahead</p>
 					</div>
 					<div class="curve">
-						<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%204%20blue.png">
-						<p>4. Procrastinator</p>
+						<img onclick="setScoreType(3)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%204%20blue.png">
+						<p id="procrastinator">4. Procrastinator</p>
 					</div>
 				</div>
 				<div class="link-select settings-panel">
 					<h2>Quick Access Links:</h2>
-					<div class="items">
+					<div id="settings-links" class="items">
 						<div class="item">
 							<img src="https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png">
 							<p>Link</p>
@@ -161,8 +161,8 @@
 						<br>
 						If something goes wrong, you can also delete your data for a fresh start.
 					</p>
-					<button class="delete-data">Delete All Data</button>
-					<button class="view-source">View Source</button>
+					<button onclick="deleteAll()" id="delete-data" class="delete-data">Delete All Data</button>
+					<button href="https://github.com/Tuestech/code" class="view-source">View Source</button>
 				</div>
       </div>
     </div>

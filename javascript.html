@@ -2,6 +2,9 @@
   // Settings
   var scoreType = 0
 
+  // Favicon website pairs
+  var imagePairs = [["classroom.google.com", "https://cdn.worldvectorlogo.com/logos/google-classroom.svg"], ["aps.elmhurst205.org", "https://help.powerschool.com/html/@7CEBA9EC6AB5B49E43B3D1241F8392F1/assets/ps_logo_lg.png"]]
+
   // Array
   Array.prototype.remove = function(index) {
     if (this.length-1 == index) {
@@ -48,6 +51,7 @@
     var taskout = []
     var linkout = []
     var temp = input.split("{divider}")
+    scoreType = temp[2]
     var linkdata = temp[1].split("{list}")
     var taskdata = temp[0].split("{list}")
     var row;
@@ -84,7 +88,7 @@
     }
   }
   function setData() {
-    google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata))
+    google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata)+"{divider}"+scoreType)
   }
   function setScores() {
     var task;
@@ -106,7 +110,6 @@
       data = decrypted[0]
       linkdata = decrypted[1]
       showPage()
-      updateDashboard()
       document.getElementById("loading").style.opacity = 0;
       setTimeout(function(){document.getElementById("loading").style.zIndex = -999}, 1500);
     }
@@ -128,6 +131,7 @@
       updateTasks()
     } else if (page == "settings") {
       document.getElementById("settings body").setAttribute("style", "display: grid")
+      updateSettings()
     }
   }
   function setPage(name) {
@@ -207,24 +211,36 @@
 
   // Calculation
   function score(task) {
-    console.log("score was called")
+    console.log(task)
     if (task[4] == 100) {
       return -999
     }
     // Set coefficient and exponent
-    var coef = 100
-    var exp = 0.5
-    if (scoreType == 1) {
-      coef = 1
-      exp = 1
+    var coef = "a"
+    var exp = "a"
+    switch (scoreType) {
+      case "0":
+        coef = 100
+        exp = 0.5
+        break
+      case "1":
+        coef = 1
+        exp = 1
+        break
+      case "2":
+        coef = 5179.47
+        exp = 0.35
+        break
     }
+
     // Math
     var prog = daysBetween(new Date(), new Date(task[1]))/daysBetween(new Date(task[2]), new Date(task[1]))
+    prog = prog * 100
     var expected;
     if (prog < 0) {
       expected = 0
     } else {
-      expected = (coef*prog)^exp
+      expected = (coef*prog)**exp
     }
     return expected - task[4]
   }
@@ -345,19 +361,21 @@
     document.getElementById("timeline-lines").innerHTML = output;
   }
   function setLinks() {
-    var websiteImage = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
-    var images = ["https://cdn.worldvectorlogo.com/logos/google-classroom.svg", "https://help.powerschool.com/html/@7CEBA9EC6AB5B49E43B3D1241F8392F1/assets/ps_logo_lg.png"]
-    var names = ["Google Classroom", "Powerschool"]
-    var links = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
     var output = ""
-    function generate(image, name, link) {
+    function generate(name, link) {
+      var image = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
+      var pair
+      for (pair of imagePairs) {
+        var pairLink = pair[0]
+        if (link.includes(pairLink)) {
+          image = pair[1]
+          break
+        }
+      }
       return "<a href='" + link + "' target='_blank'><div><img src='" + image + "'><p>" + name + "</p></div></a>"
     }
-    for (var i=0; i<images.length; i++) {
-      output = output + generate(images[i], names[i], links[i])
-    }
     for (var i=0; i<linkdata.length; i++) {
-      output = output + generate(websiteImage, linkdata[i][1], linkdata[i][0])
+      output = output + generate(linkdata[i][1], linkdata[i][0])
     }
     document.getElementById("links").innerHTML = output
   }
@@ -488,6 +506,52 @@
       element = event.target
     }
     data[index][4] = newSize
+    needUpdate = true
+  }
+
+  // Settings
+  function updateSettings() {
+    var output = ""
+    function generate(name, link) {
+      var image = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
+      var pair
+      for (pair of imagePairs) {
+        var pairLink = pair[0]
+        if (link.includes(pairLink)) {
+          image = pair[1]
+          break
+        }
+      }
+
+      return "<div class='item'><img src='"+image+"'><p>"+name+"</p><img class='link-edit' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'><img class='link-delete' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'></div>"
+    }
+    var link
+    for (link of linkdata) {
+      output += generate(link[1], link[0])
+    }
+    document.getElementById("settings-links").innerHTML = output
+  }
+  function deleteAll() {
+    button = document.getElementById("delete-data")
+    if (button.innerText == "Click to confirm") {
+      // data = [["Example", new Date(), new Date(), 0, 50, "https://tues.tech"]]
+      // linkdata = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
+      // forceUpdate()
+      button.innerText = "Delete All Data"
+      updateSettings()
+    } else {
+      button.innerText = "Click to confirm"
+      setTimeout(function(){button.innerText = "Delete All Data"}, 2000)
+    }
+  }
+  function setScoreType(type) {
+    if (type == 3) {
+      var p = document.getElementById("procrastinator")
+      p.innerText = "No procrastinating!"
+      setTimeout(function(){p.innerText = "4. Procrastinator"}, 1000)
+      return
+    }
+    scoreType = type
     needUpdate = true
   }
 
