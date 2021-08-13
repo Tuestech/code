@@ -21,6 +21,7 @@ You should have received a copy of the GNU Affero General Public License along w
     } else {
       var back = this.slice(0, index)
       var front = this.slice(index+1)
+      return back.concat(front)
     }
     return this
   }
@@ -222,7 +223,6 @@ You should have received a copy of the GNU Affero General Public License along w
 
   // Calculation
   function score(task) {
-    console.log(task)
     if (task[4] == 100) {
       return -999
     }
@@ -484,6 +484,7 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function deleteTask(index) {
     data = data.remove(index)
+    console.log(data)
     updateTasks()
     forceUpdate()
     closeOverlay()
