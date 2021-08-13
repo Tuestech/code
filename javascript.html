@@ -38,6 +38,8 @@ You should have received a copy of the GNU Affero General Public License along w
     string = string.replaceAll('{divider}', '(divider)')
     string = string.replaceAll('>', '&gt')
     string = string.replaceAll('<', '&lt')
+    string = string.replaceAll('javascript:', '')
+    string = string.replaceAll('\\', '&#92')
     return string
   }
   function encrypt(input) {
@@ -521,7 +523,7 @@ You should have received a copy of the GNU Affero General Public License along w
   // Settings
   function updateSettings() {
     var output = ""
-    function generate(name, link) {
+    function generate(name, link, index) {
       var image = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
       var pair
       for (pair of imagePairs) {
@@ -532,11 +534,11 @@ You should have received a copy of the GNU Affero General Public License along w
         }
       }
 
-      return "<div class='item'><img src='"+image+"'><p>"+name+"</p><img class='link-edit' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'><img class='link-delete' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'></div>"
+      return "<div class='item'><img src='"+image+"'><p>"+name+"</p><img onclick='linkEditButton("+index+")' class='link-edit' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'><img onclick='deleteLink("+index+")' class='link-delete' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'></div>"
     }
-    var link
-    for (link of linkdata) {
-      output += generate(link[1], link[0])
+    for (var i = 0; i < linkdata.length; i++) {
+      var link = linkdata[i]
+      output += generate(link[1], link[0], i)
     }
     document.getElementById("settings-links").innerHTML = output
   }
@@ -563,7 +565,35 @@ You should have received a copy of the GNU Affero General Public License along w
     scoreType = type
     needUpdate = true
   }
+  function linkEditButton(index) {
+    document.getElementById("link-edit-overlay").setAttribute("style", "display: grid")
+    document.getElementById("link-name-input").value = linkdata[index][1]
+    document.getElementById("link-link-input").value = linkdata[index][0]
 
+    document.getElementById("link-edit-delete").setAttribute("onclick", "deleteLink("+index+")")
+    document.getElementById("link-edit-delete").onclick = function() {
+      deleteLink(index);
+    }
+    document.getElementById("link-ok").setAttribute("onclick", "deleteLink("+index+")")
+    document.getElementById("link-ok").onclick = function() {
+      linkOkButton(index);
+    }
+  }
+  function closeLinkOverlay() {
+    document.getElementById("link-edit-overlay").setAttribute("style", "display: none")
+  }
+  function deleteLink(index) {
+    linkdata.remove(index)
+  }
+  function linkOkButton(index) {
+    var name = document.getElementById("link-name-input").value
+    var link = document.getElementById("link-link-input").value
+
+    linkdata[index] = [safeString(link), safeString(name)]
+    closeLinkOverlay()
+    updateSettings()
+    needUpdate = true
+  }
   // Run
   startup()
 </script>

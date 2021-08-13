@@ -162,8 +162,22 @@
 						If something goes wrong, you can also delete your data for a fresh start.
 					</p>
 					<button onclick="deleteAll()" id="delete-data" class="delete-data">Delete All Data</button>
-					<button href="https://github.com/Tuestech/code" class="view-source">View Source</button>
+					<button onclick="window.open('https://github.com/Tuestech/code', '_blank');" class="view-source">View Source</button>
 				</div>
+        <div id="link-edit-overlay" class="edit" style="display: none">
+          <div class="alert">
+						<div class="inputs">
+							<input type="text" class="input" id="link-name-input" style="grid-area: name;"></input><p style="grid-area: name-label">Name</p>
+							<input type="text" class="input" id="link-link-input" style="grid-area: link;"></input><p style="grid-area: link-label">Link</p>
+						</div>
+						<div class="buttons">
+							<button class="delete" id="link-edit-delete">Delete</button>
+							<div></div>
+							<button class="cancel" onclick="closeLinkOverlay()">Cancel</button>
+							<button class="ok" id="link-ok">OK</button>
+						</div>
+					</div>
+        </div>
       </div>
     </div>
     <?!= include('Javascript'); ?>
