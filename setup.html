@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+		<style>
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			body {
+				display: grid;
+				grid-template-rows: min-content auto;
+			}
+			header img {
+				display: block;
+				height: 80px;
+				width: 80px;
+				margin: 10px auto;
+			}
+			header h1 {
+				font-family: 'Lexend';
+				font-weight: 500;
+				font-size: 30px;
+				width: calc(100% - 40px);
+				text-align: center;
+				margin: 0px 20px;
+			}
+			.block {
+				display: none;
+				background-color: #F3F3F3;
+				border-radius: 10px;
+				padding: 10px 15px;
+				margin: 10px 20px;
+				margin-top: 30px;
+			}
+			.block h2 {
+				font-family: 'Lexend';
+				font-size: 20px;
+				font-weight: 500;
+			}
+			.block p {
+				font-family: 'Lexend';
+				font-size: 20px;
+				font-weight: 400;
+			}
+			button {
+				display: block;
+				font-family: 'Lexend';
+				font-size: 20px;
+				background-color: #6FA8DC;
+				color: #ffffff;
+				font-weight: 500;
+				border: none;
+				width: min-content;
+				padding: 5px 30px;
+				border-radius: 5px;
+				margin-left: auto;
+				margin-right: 20px;
+				transition: 300ms linear;
+			}
+			button:hover {
+				opacity: 80%;
+			}
+			button:active {
+				opacity: 100%;
+				transition: none;
+			}
+			.curves {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+			}
+			.curve {
+				grid-template-rows: repeat(2, min-content);
+			}
+			.curve:hover {
+				opacity: 60%;
+			}
+			.curve img {
+				display: block;
+				width: 150px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.curve p {
+				margin-top: 10px;
+				font-family: 'Lexend';
+				font-size: 15px;
+				text-align: center;
+			}
+		</style>
+  </head>
+  <body>
+    <header>
+			<img src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
+			<h1 id="title">Welcome to Tuesday, the Smart Work Management Tool</h1>
+		</header>
+		<div id="1" class="block" style="display: block;">
+			<p>
+				Thanks for checking out our tool! We hope that it can help you manage your work, so that you can do it better in less time. But first, we need to know some things about how you like to work so that we can optimize the smart sorting algorithm just for you.
+			</p>
+		</div>
+		<div id="2" class="block">
+			<h2>
+				What is a progress curve?
+			</h2>
+			<br>
+			<br>
+			<p>
+				The main way our sorting algorithm knows how to prioritize your tasks is by checking against your selected progress curve. A progress curve is a measure of the amount of a task completed for a time during the duration of that task. Options 1 and 3 will have you complete more of a task up front, with Option 3 being more aggressive. Option 2 will have you complete an equal amount every day for the duration of the task.
+			</p>
+			<br>
+			<br>
+			<br>
+			<br>
+			<h2>
+				Progress curve selection:
+			</h2>
+			<br>
+			<br>
+			<div class="curves">
+				<div class="curve" onclick="setData(0)">
+					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%201%20blue.png">
+					<p>1. Recommended</p>
+				</div>
+				<div class="curve" onclick="setData(1)">
+					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%202%20blue.png">
+					<p>2. Average</p>
+				</div>
+				<div class="curve" onclick="setData(2)">
+					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%203%20blue.png">
+					<p>3. Get Ahead</p>
+				</div>
+			</div>
+		</div>
+		<div id="3" class="block">
+			<p>
+				You’re almost there! Just a few extra things you should know:
+				<br>
+				<br>
+				If you have any questions feel free to email us at:
+				<br>
+				67908@elmhurst205.org or 66935@elmhurst205.org 
+				<br>
+				<br>
+				More details and technical resources at:
+				<br>
+				Source: <a href="https://github.com/Tuestech/code">https://github.com/Tuestech/code</a>
+				<br>
+				License: <a href="https://github.com/Tuestech/code/blob/main/LICENSE">https://github.com/Tuestech/code/blob/main/LICENSE</a> 
+				<br>
+				Privacy Policy: <a href="https://tuestech.weebly.com/privacy-policy.html">https://tuestech.weebly.com/privacy-policy.html</a>
+				<br>
+				<br>
+				When you're ready, <a href="https://www.tues.tech">click here</a> to start using Tuesday!
+			</p>
+		</div>
+		<button id="next" onclick="next()">Next</button>
+
+    <script>
+      var page = 1
+      var data = null
+      var scoreType = 0
+      function next() {
+        if (page == 1) {
+          document.getElementById("title").innerText = "Progress Curves"
+        } else if (page == 2) {
+          document.getElementById("title").innerText = "Help and Resources"
+          document.getElementById("next").setAttribute("style", "display: none")
+        }
+        document.getElementById(page).setAttribute("style", "display: none")
+        page += 1
+        document.getElementById(page).setAttribute("style", "display: block")
+      }
+      function getData(scoreType) {
+        google.script.run.withSuccessHandler(onSuccess).getData()
+        function onSuccess(value) {
+          data = value
+        }
+      }
+      function setData(scoreType) {
+        if (data == null) {
+          setTimeout(function() {
+            setData()
+          }, 300)
+        }
+        var other = data.substring(0, data.length-1)
+        data = other + scoreType
+        google.script.run.setData(data)
+      }
+      getData()
+    </script>
+  </body>
+</html>
