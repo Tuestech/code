@@ -34,9 +34,9 @@ You should have received a copy of the GNU Affero General Public License along w
   var sorted = null
   var linkdata = "a";
   function safeString(string) {
-    string = string.replaceAll('{list}', '(list)')
-    string = string.replaceAll('{item}', '(item)')
-    string = string.replaceAll('{divider}', '(divider)')
+    string = string.replaceAll('Ł', 'L')
+    string = string.replaceAll('Ĭ', 'I')
+    string = string.replaceAll('Đ', 'D')
     string = string.replaceAll('>', '&gt')
     string = string.replaceAll('<', '&lt')
     string = string.replaceAll('javascript:', '')
@@ -49,9 +49,9 @@ You should have received a copy of the GNU Affero General Public License along w
     for (row of input) {
       var item;
       for (item of row) {
-        output = output + item + "{item}"
+        output = output + item + "Ĭ"
       }
-      output = output + "{list}"
+      output = output + "Ł"
     }
     return output
   }
@@ -62,18 +62,18 @@ You should have received a copy of the GNU Affero General Public License along w
     var output = []
     var taskout = []
     var linkout = []
-    var temp = input.split("{divider}")
+    var temp = input.split("Đ")
     scoreType = temp[2]
-    var linkdata = temp[1].split("{list}")
-    var taskdata = temp[0].split("{list}")
+    var linkdata = temp[1].split("Ł")
+    var taskdata = temp[0].split("Ł")
     var row;
     for (row of taskdata) {
       taskout.push(0)
-      taskout[taskout.length - 1] = clean(row.split("{item}",6))
+      taskout[taskout.length - 1] = clean(row.split("Ĭ",6))
     }
     for (row of linkdata) {
       linkout.push(0)
-      linkout[linkout.length - 1] = clean(row.split("{item}",2))
+      linkout[linkout.length - 1] = clean(row.split("Ĭ",2))
     }
     output = [clean(taskout), clean(linkout)]
     if (clean(output)==[]) {
@@ -86,7 +86,11 @@ You should have received a copy of the GNU Affero General Public License along w
     var item;
     for (item of input) {
       if ((item != "")&&(item != [])&&(item != null)&&(item != [,])) {
-        output.push(item)
+        if (isNaN(item.toString())) {
+          output.push(item)
+        } else {
+          output.push(parseInt(item))
+        }
       }
     }
     return output
@@ -100,7 +104,7 @@ You should have received a copy of the GNU Affero General Public License along w
     }
   }
   function setData() {
-    google.script.run.setData(encrypt(data)+"{divider}"+encrypt(linkdata)+"{divider}"+scoreType)
+    google.script.run.setData(encrypt(data)+"Đ"+encrypt(linkdata)+"Đ"+scoreType)
   }
   function setScores() {
     var task;
@@ -403,8 +407,9 @@ You should have received a copy of the GNU Affero General Public License along w
       dayString = days + " days left"
       if (days == 1) {
         dayString = days + " day left"
-      }
-      if (days < 0) {
+      } else if (days == 0) {
+        dayString = "Due tomorrow!"
+      } else if (days < 0) {
         dayString = "Overdue!"
       }
       if (days <= 1) {
@@ -464,7 +469,7 @@ You should have received a copy of the GNU Affero General Public License along w
     }
     
     if (typeof data[index] === "undefined") {
-      data[index] = ["", "", "", "", 0, ""]
+      data[index] = ["", "", "", 0, 0, ""]
     }
 
     data[index][0] = safeString(name)
@@ -484,7 +489,6 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function deleteTask(index) {
     data = data.remove(index)
-    console.log(data)
     updateTasks()
     forceUpdate()
     closeOverlay()
@@ -498,7 +502,7 @@ You should have received a copy of the GNU Affero General Public License along w
     } else {
       currentSize = getComputedStyle(event.target).getPropertyValue("--progress");
     }
-    currentSize.replace("%", "")
+    currentSize = currentSize.replace("%", "")
     if (y > 0) {
       newSize = parseInt(currentSize) - 5;
     } else {
@@ -565,11 +569,20 @@ You should have received a copy of the GNU Affero General Public License along w
     }
     scoreType = type
     needUpdate = true
+    var p = document.getElementById(type)
+    var oldText = p.innerText
+    p.innerText = "Selected"
+    setTimeout(function(){p.innerText = oldText}, 1000)
   }
   function linkEditButton(index) {
     document.getElementById("link-edit-overlay").setAttribute("style", "display: grid")
-    document.getElementById("link-name-input").value = linkdata[index][1]
-    document.getElementById("link-link-input").value = linkdata[index][0]
+    if (index == linkdata.length) {
+      document.getElementById("link-name-input").value = ""
+      document.getElementById("link-link-input").value = ""
+    } else {
+      document.getElementById("link-name-input").value = linkdata[index][1]
+      document.getElementById("link-link-input").value = linkdata[index][0]
+    }
 
     document.getElementById("link-edit-delete").setAttribute("onclick", "deleteLink("+index+")")
     document.getElementById("link-edit-delete").onclick = function() {
@@ -585,6 +598,8 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function deleteLink(index) {
     linkdata.remove(index)
+    updateSettings()
+    closeLinkOverlay()
   }
   function linkOkButton(index) {
     var name = document.getElementById("link-name-input").value
@@ -594,6 +609,11 @@ You should have received a copy of the GNU Affero General Public License along w
     closeLinkOverlay()
     updateSettings()
     needUpdate = true
+  }
+  function newLink() {
+    linkEditButton(linkdata.length)
+    document.getElementById("link-name-input").value = ""
+    document.getElementById("link-link-input").value = ""
   }
   // Run
   startup()
