@@ -286,7 +286,7 @@ You should have received a copy of the GNU Affero General Public License along w
       var task = sorted[i]
       var color;
       if (task[4] != 100) {
-        output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'>✔</label></div>"
+        output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'></label></div>"
       } else  {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
       }
@@ -419,7 +419,7 @@ You should have received a copy of the GNU Affero General Public License along w
       } else {
         color = taskColors[2]
       }
-      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><div onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
+      output = output + "<div class='item'><div class='task'><a>"+task[0]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><div title='Scroll to change progress' onwheel='scrollslide(event, "+i+")' class='progress-container'><div class='progress-bar' id='task-progress-bar"+i+"'></div></div></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
     }
     document.getElementById("tasks-items").innerHTML = output + newButton
     for (var i=0; i<data.length; i++) {
