@@ -458,10 +458,11 @@ You should have received a copy of the GNU Affero General Public License along w
     }
   }
   function okButton(index) {
-    name = document.getElementById("name-input").value
-    start = document.getElementById("start-input").value
-    due = document.getElementById("due-input").value
-    link = document.getElementById("link-input").value
+    var zone = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]
+    var name = document.getElementById("name-input").value
+    var start = document.getElementById("start-input").value + " " + zone
+    var due = document.getElementById("due-input").value + " " + zone
+    var link = document.getElementById("link-input").value
 
     if ((name == "")||(start == "")||(due == "")) {
       alert("Please fill all required fields. (Link is not required)")
@@ -471,7 +472,6 @@ You should have received a copy of the GNU Affero General Public License along w
     if (typeof data[index] === "undefined") {
       data[index] = ["", "", "", 0, 0, ""]
     }
-
     data[index][0] = safeString(name)
     data[index][1] = new Date(start)
     data[index][2] = new Date(due)
@@ -550,9 +550,9 @@ You should have received a copy of the GNU Affero General Public License along w
   function deleteAll() {
     button = document.getElementById("delete-data")
     if (button.innerText == "Click to confirm") {
-      // data = [["Example", new Date(), new Date(), 0, 50, "https://tues.tech"]]
-      // linkdata = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
-      // forceUpdate()
+      data = [["Example", new Date(), new Date(), 0, 50, "https://tues.tech"]]
+      linkdata = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
+      forceUpdate()
       button.innerText = "Delete All Data"
       updateSettings()
     } else {
