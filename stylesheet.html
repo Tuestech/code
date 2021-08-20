@@ -191,37 +191,39 @@
   }
 
   /* Progress Bar */
-  .progress-container {
-    --border: 3px;
-    --height: calc(100%-var(--border)-var(--border));
+  .slider {
+    -webkit-appearance: none;
     margin: 0px 5px;
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    height: var(--height);
-    border-radius: 10px;
-    border: solid #CCCCCC var(--border);
+    width: calc(100%-10px);
+    height: 25px;
     background: #CCCCCC;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    overflow: hidden;
+    border-radius: 10px;
+    border: solid #CCCCCC 3px;
   }
-  .progress-container:hover {
-    opacity: 80%;
+
+  .slider:hover {
+    opacity: 1;
   }
-  .progress-bar {
-    --progress: 100%;
-    --border: 3px;
-    margin: 0;
-    position: absolute;
-    transform: translate(calc(-1*(100% - var(--progress))));
-    height: 100%;
-    width: calc(100% + (2 * var(--border)));
-    background: #3D85C6;
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0px;
+    height: 0px;
+    cursor: pointer;
+    background: black;
+    box-shadow: -1000px 0 0 1000px #3D85C6;
   }
-  .progress-container:active::after {
-    content: "Scroll over me!";
-    font-size: 20px;
-    color: #000000;
-    z-index: 999999;
-    position: absolute;
+
+  .slider::-moz-range-thumb {
+    width: 0px;
+    height: 0px;
+    cursor: pointer;
+    box-shadow: -1000px 0 0 1000px #3D85C6;
   }
 
   /* Toggle Button */
