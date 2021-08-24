@@ -321,7 +321,7 @@ You should have received a copy of the GNU Affero General Public License along w
     } else {
       sorted[index][4] = 0
     }
-    forceUpdate()
+    needUpdate = true
     sortData()
     setToday()
     setTimeline()
@@ -417,7 +417,7 @@ You should have received a copy of the GNU Affero General Public License along w
       if (days == 1) {
         dayString = days + " day left"
       } else if (days == 0) {
-        dayString = "Due tomorrow!"
+        dayString = "Due today!"
       } else if (days < 0) {
         dayString = "Overdue!"
       }
@@ -600,9 +600,10 @@ You should have received a copy of the GNU Affero General Public License along w
     document.getElementById("link-edit-overlay").setAttribute("style", "display: none")
   }
   function deleteLink(index) {
-    linkdata.remove(index)
+    linkdata = linkdata.remove(index)
     updateSettings()
     closeLinkOverlay()
+    needUpdate = true
   }
   function linkOkButton(index) {
     var name = document.getElementById("link-name-input").value

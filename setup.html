@@ -152,7 +152,7 @@
 				Privacy Policy: <a href="https://tuestech.weebly.com/privacy-policy.html">https://tuestech.weebly.com/privacy-policy.html</a>
 				<br>
 				<br>
-				When you're ready, <a href="https://www.tues.tech">click here</a> to start using Tuesday!
+				When you're ready, <a href="https://www.tues.tech">click here</a> to start using Tuesday.
         <br>
 			</p>
 		</div>
@@ -162,6 +162,8 @@
       var page = 1
       var data = null
       var scoreType = 0
+      var previousElement = null
+      var previousText = null
       function next() {
         if (page == 1) {
           document.getElementById("title").innerText = "Progress Curves"
@@ -188,6 +190,11 @@
         var other = data.substring(0, data.length-1)
         data = other + scoreType
         google.script.run.setData(data)
+      }
+      function select(element) {
+        previousElement.innerText = previousText
+        previousText = element.innerText
+        element.innerText = "Selected"
       }
       getData()
     </script>
