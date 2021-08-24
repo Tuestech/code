@@ -257,6 +257,7 @@
 
   /* Super Check */
   .scheck ~ label {
+    font-family: "Lexend";
     display: block;
     background-color: #EFEFEF;
     border-radius: 100px;
@@ -362,7 +363,7 @@
   .timeline-line {
     border-radius: 10px;
     margin: 0px 10px;
-    width: 100%;
+    width: calc(100% - 20px);
     background-color: #CFE2F3;
     padding: 5px;
     grid-area: active;
@@ -379,11 +380,13 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     margin-left: 0px;
+    width: calc(100% - 10px);
   }
   .timeline-line.right-over {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     margin-right: 0px;
+    width: calc(100% - 10px);
   }
   .timeline-line.overdue {
     border-top-left-radius: 0px;
