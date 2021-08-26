@@ -8,6 +8,12 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see https:\/\/www.gnu.org\/licenses\/.
   `)
 
+  // Version updates
+  setInterval(function() {
+    window.location.replace("https://tues.tech");
+  }, 1000*60*60*24)
+
+
   // Settings
   var scoreType = 0
 
@@ -549,6 +555,7 @@ You should have received a copy of the GNU Affero General Public License along w
       output += generate(link[1], link[0], i)
     }
     document.getElementById("settings-links").innerHTML = output
+    showSelectedCurve()
   }
   function deleteAll() {
     button = document.getElementById("delete-data")
@@ -563,6 +570,13 @@ You should have received a copy of the GNU Affero General Public License along w
       setTimeout(function(){button.innerText = "Delete All Data"}, 2000)
     }
   }
+  function showSelectedCurve() {
+    for (var i = 0; i < 3; i++) {
+      const element = document.getElementById(i)
+      element.innerHTML = element.className
+    }
+    document.getElementById(scoreType).innerHTML = "Selected"
+  }
   function setScoreType(type) {
     if (type == 3) {
       var p = document.getElementById("procrastinator")
@@ -572,10 +586,7 @@ You should have received a copy of the GNU Affero General Public License along w
     }
     scoreType = type
     needUpdate = true
-    var p = document.getElementById(type)
-    var oldText = p.innerText
-    p.innerText = "Selected"
-    setTimeout(function(){p.innerText = oldText}, 1000)
+    showSelectedCurve()
   }
   function linkEditButton(index) {
     document.getElementById("link-edit-overlay").setAttribute("style", "display: grid")
