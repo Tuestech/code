@@ -18,7 +18,7 @@ You should have received a copy of the GNU Affero General Public License along w
   var scoreType = 0
 
   // Favicon website pairs
-  var imagePairs = [["classroom.google.com", "https://cdn.worldvectorlogo.com/logos/google-classroom.svg"], ["aps.elmhurst205.org", "https://help.powerschool.com/html/@7CEBA9EC6AB5B49E43B3D1241F8392F1/assets/ps_logo_lg.png"]]
+  var imagePairs = [["classroom.google.com", "https://github.com/Tuestech/images/raw/main/google-classroom.svg"], ["aps.elmhurst205.org", "https://github.com/Tuestech/images/raw/main/ps_logo_lg.png"]]
 
   // Array
   Array.prototype.remove = function(index) {
@@ -420,14 +420,18 @@ You should have received a copy of the GNU Affero General Public License along w
       task = data[i]
       days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
       dayString = days + " days left"
-      if (days == 1) {
+      if (task[4] == 100) {
+        dayString = "Done!"
+      } else if (days == 1) {
         dayString = days + " day left"
       } else if (days == 0) {
         dayString = "Due today!"
       } else if (days < 0) {
         dayString = "Overdue!"
       }
-      if (days <= 1) {
+      if (task[4] == 100) {
+        color = taskColors[2]
+      } else if (days <= 1) {
         color = taskColors[0]
       } else if (days <= 5) {
         color = taskColors[1]
@@ -623,7 +627,7 @@ You should have received a copy of the GNU Affero General Public License along w
     linkdata[index] = [safeString(link), safeString(name)]
     closeLinkOverlay()
     updateSettings()
-    needUpdate = true
+    forceUpdate()
   }
   function newLink() {
     linkEditButton(linkdata.length)
