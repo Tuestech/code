@@ -3,6 +3,8 @@ Tuesday is a smart work management tool that helps you keep track of your tasks,
 
 ## Table of contents
 
+[New contributors](#New-contributors)
+
 [Reporting bugs](#Reporting-bugs)
 
 [Suggesting features](#Suggesting-features)
@@ -15,6 +17,15 @@ Tuesday is a smart work management tool that helps you keep track of your tasks,
 [License](#License)
 
 &nbsp;
+
+## New-contributors
+
+If you've never used github or are new, that's fine. This README is designed to be beginner-friendly so anyone can contribute.
+
+Don't worry too much about syntax, we will try to correct syntax on pull requests and issues.
+Just make sure that you correct any issues we find.
+
+&nbsp
 
 ## Reporting bugs
 
