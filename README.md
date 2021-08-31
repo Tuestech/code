@@ -25,7 +25,7 @@ If you've never used github or are new, that's fine. This README is designed to 
 Don't worry too much about syntax, we will try to correct syntax on pull requests and issues.
 Just make sure that you correct any issues we find.
 
-&nbsp
+&nbsp;
 
 ## Reporting bugs
 
