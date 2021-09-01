@@ -291,6 +291,9 @@ You should have received a copy of the GNU Affero General Public License along w
     setTimeout(function() {document.getElementById(id).style.animation="1s fade-in backwards"}, delay)
     setTimeout(function() {document.getElementById(id).style.animation="idle"}, 1000+delay)
   }
+  function openTasks() {
+    setPage('tasks');
+  }
   function setToday() {
     var output = ""
     var date = getDate()
@@ -312,7 +315,13 @@ You should have received a copy of the GNU Affero General Public License along w
       } else {
         color = colors[2]
       }
-      output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + task[5] + "' target='_blank'>" + task[0] + "</a></div>"
+      var link = task[5]
+      var target = "_blank"
+      if (task[5] == "https://tues.tech") {
+        link = "javascript: openTasks();"
+        target = "_self"
+      }
+      output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + link + "' target='"+target+"'>" + task[0] + "</a></div>"
     }
     if (output == "") {
       output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
