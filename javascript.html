@@ -467,8 +467,8 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function newTask() {
     document.getElementById("name-input").value = ""
-    document.getElementById("start-input").value = ""
-    document.getElementById("due-input").value = ""
+    document.getElementById("start-input").valueAsDate = new Date()
+    document.getElementById("due-input").valueAsDate = new Date()
     document.getElementById("link-input").value = ""
 
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
@@ -601,8 +601,10 @@ You should have received a copy of the GNU Affero General Public License along w
     for (var i = 0; i < 3; i++) {
       const element = document.getElementById(i)
       element.innerHTML = element.className
+      element.setAttribute("style", "font-weight: normal;")
     }
     document.getElementById(scoreType).innerHTML = "Selected"
+    document.getElementById(scoreType).setAttribute("style", "font-weight: bold;")
   }
   function setScoreType(type) {
     if (type == 3) {
