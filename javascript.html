@@ -110,6 +110,14 @@ You should have received a copy of the GNU Affero General Public License along w
     }
     return output
   }
+  function formatLink(link) {
+    if (link.substring(0, 8) != "https://") {
+      if (link.substring(0, 7) != "http://") {
+        return "https://"+link;
+      }
+    }
+    return link;
+  }
   function getData() {
     google.script.run.withSuccessHandler(onSuccess).getData()
     function onSuccess(value) {
@@ -315,11 +323,17 @@ You should have received a copy of the GNU Affero General Public License along w
       } else {
         color = colors[2]
       }
-      var link = task[5]
-      var target = "_blank"
-      if (task[5] == "https://tues.tech") {
-        link = "javascript: openTasks();"
+      var link;
+      if (typeof task[5] == 'undefined' || task[5] == "undefined") {
+        link = "#";
         target = "_self"
+      } else {
+        link = formatLink(task[5])
+        var target = "_blank"
+        if (task[5] == "https://tues.tech") {
+          link = "javascript: openTasks();"
+          target = "_self"
+        }
       }
       output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + link + "' target='"+target+"'>" + task[0] + "</a></div>"
     }
