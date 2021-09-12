@@ -705,7 +705,7 @@ You should have received a copy of the GNU Affero General Public License along w
     var name = document.getElementById("link-name-input").value
     var link = document.getElementById("link-link-input").value
 
-    linkdata[index] = [safeString(link), safeString(name)]
+    linkdata[index] = [formatLink(safeString(link)), safeString(name)]
     closeLinkOverlay()
     updateSettings()
     forceUpdate()
