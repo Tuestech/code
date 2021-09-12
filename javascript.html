@@ -39,15 +39,30 @@ You should have received a copy of the GNU Affero General Public License along w
   var data = null;
   var sorted = null
   var linkdata = "a";
-  function task(name, start, due, classq, priority, progress, link) {
-    this.name = name;
-    this.start = start;
-    this.due = due;
-    this.class = classq;
-    this.priority = priority;
-    this.progress = progress;
-    this.link = link;
+  class Task {
+    constructor(name="", start=new Date(), due=new Date(), classq="", priority=-999, progress=0, link="") {
+      this.name = name;
+      this.start = start;
+      this.due = due;
+      this.class = classq;
+      this.priority = priority;
+      this.progress = progress;
+      this.link = link;
+    }
+    fromArray(array) {
+      this.name = array[0]
+      this.start = array[1]
+      this.due = array[2]
+      this.priority = array[3]
+      this.progress = array[4]
+      this.link = array[5]
+      this.class = array[6]
+    }
+    toArray() {
+      return [this.name, this.start, this.due, this.priority, this.progress, this.link, this.class]
+    }
   }
+  
   function safeString(string) {
     string = string.replaceAll('Ł', 'L')
     string = string.replaceAll('Ĭ', 'I')
