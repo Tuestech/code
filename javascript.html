@@ -37,6 +37,7 @@ You should have received a copy of the GNU Affero General Public License along w
   
   // Data Management
   var data = null;
+  var objects = []
   var sorted = null
   var linkdata = "a";
   class Task {
@@ -57,6 +58,7 @@ You should have received a copy of the GNU Affero General Public License along w
       this.progress = array[4]
       this.link = array[5]
       this.class = array[6]
+      return this
     }
     toArray() {
       return [this.name, this.start, this.due, this.priority, this.progress, this.link, this.class]
@@ -73,6 +75,7 @@ You should have received a copy of the GNU Affero General Public License along w
     string = string.replaceAll('\\', '&#92')
     return string
   }
+
   function encrypt(input) {
     var output = ""
     var row;
@@ -135,25 +138,36 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function getData() {
     google.script.run.withSuccessHandler(onSuccess).getData()
+    let objects = []
     function onSuccess(value) {
       var decrypted = decrypt(value)
+      let temp = decrypted[0]
       data = decrypted[0]
+      for (array of temp) {
+        let task = new Task()
+        task.fromArray(array)
+        objects.push(task)
+      }
       linkdata = decrypted[1]
     }
   }
   function setData() {
-    google.script.run.setData(encrypt(data)+"Đ"+encrypt(linkdata)+"Đ"+scoreType)
+    let arrayData = []
+    for (var i = 0; i < objects.length; i++) {
+      arrayData.push(objects[i].toArray())
+    }
+    google.script.run.setData(encrypt(arrayData)+"Đ"+encrypt(linkdata)+"Đ"+scoreType)
   }
   function setScores() {
     var task;
-    for (task of data) {
-      task[3] = score(task)
+    for (task of objects) {
+      task["priority"] = score(task)
     }
   }
   function sortData() {
     setScores()
-    var output = [...data]
-    output.sort((a, b) => b[3] - a[3])
+    var output = [...objects]
+    output.sort((a, b) => b["priority"] - a["priority"])
     sorted = output
     return output
   }
@@ -161,7 +175,14 @@ You should have received a copy of the GNU Affero General Public License along w
     google.script.run.withSuccessHandler(onSuccess).getData()
     function onSuccess(value) {
       var decrypted = decrypt(value)
+      let temp = decrypted[0]
       data = decrypted[0]
+      for (array of temp) {
+        let task = new Task()
+        task.fromArray(array)
+        objects.push(task)
+      }
+      console.log(objects)
       linkdata = decrypted[1]
       showPage()
       document.getElementById("loading").style.opacity = 0;
@@ -265,7 +286,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
   // Calculation
   function score(task) {
-    if (task[4] == 100) {
+    if (task["progress"] == 100) {
       return -999
     }
     // Set coefficient and exponent
@@ -287,7 +308,7 @@ You should have received a copy of the GNU Affero General Public License along w
     }
 
     // Progress Deviation
-    var prog = daysBetween(new Date(), new Date(task[1]))/daysBetween(new Date(task[2]), new Date(task[1]))
+    var prog = daysBetween(new Date(), new Date(task["start"]))/daysBetween(new Date(task["due"]), new Date(task["start"]))
     prog = prog * 100
     var expected;
     if (prog < 0) {
@@ -297,7 +318,7 @@ You should have received a copy of the GNU Affero General Public License along w
     }
 
     // Urgency value
-    var daysLeft = daysBetween(new Date(task[2]), new Date())
+    var daysLeft = daysBetween(new Date(task["due"]), new Date())
     var urgency = 0
     if (daysLeft <= 0) {
       urgency = 150
@@ -305,7 +326,7 @@ You should have received a copy of the GNU Affero General Public License along w
       urgency = 100/daysLeft
     }
 
-    return expected - task[4] + urgency
+    return expected - task["progress"] + urgency
   }
 
   // Dashboard
@@ -336,31 +357,31 @@ You should have received a copy of the GNU Affero General Public License along w
     for (var i = 0; i<sorted.length; i++) {
       var task = sorted[i]
       var color;
-      if (task[4] != 100) {
+      if (task["progress"] != 100) {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'></label></div>"
       } else  {
         output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
       }
-      if (task[4] <= 40) {
+      if (task["progress"] <= 40) {
         color = colors[0]
-      } else if (task[4] < 100) {
+      } else if (task["progress"] < 100) {
         color = colors[1]
       } else {
         color = colors[2]
       }
       var link;
-      if (typeof task[5] == 'undefined' || task[5] == "undefined") {
+      if (typeof task["link"] == 'undefined' || task["link"] == "undefined") {
         link = "#";
         target = "_self"
       } else {
-        link = formatLink(task[5])
+        link = formatLink(task["link"])
         var target = "_blank"
-        if (task[5] == "https://tues.tech") {
+        if (task["link"] == "https://tues.tech") {
           link = "javascript: openTasks();"
           target = "_self"
         }
       }
-      output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + link + "' target='"+target+"'>" + task[0] + "</a></div>"
+      output = output + "<div id = 'task-name' style='background-color:" + color +"'><a href='" + link + "' target='"+target+"'>" + task["name"] + "</a></div>"
     }
     if (output == "") {
       output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
@@ -371,9 +392,9 @@ You should have received a copy of the GNU Affero General Public License along w
   function todayButton(index) {
     var checked = document.getElementById("todaybutton"+index).checked
     if (checked) {
-      sorted[index][4] = 100
+      sorted[index]["progress"] = 100
     } else {
-      sorted[index][4] = 0
+      sorted[index]["progress"] = 0
     }
     needUpdate = true
     sortData()
@@ -398,17 +419,17 @@ You should have received a copy of the GNU Affero General Public License along w
       var overdue = false
       var checkday = clearDate(new Date())
       checkday.setDate(day.getDate()-1)
-      var left = isBetween(checkday, new Date(task[1]), new Date(task[2]))
+      var left = isBetween(checkday, new Date(task["start"]), new Date(task["due"]))
       checkday = clearDate(new Date())
       checkday.setDate(day.getDate()+8)
-      var right = isBetween(checkday, new Date(task[1]), new Date(task[2]))
+      var right = isBetween(checkday, new Date(task["start"]), new Date(task["due"]))
       for (var j = 0; j<7; j++) {
-        if ((daysBetween(new Date(task[2]), new Date()) < 0) && (task[4] != 100)) {
+        if ((daysBetween(new Date(task["due"]), new Date()) < 0) && (task["progress"] != 100)) {
           line = line + "active m m m m m m"
           overdue = true
           break
         }
-        if (isBetween(day, new Date(task[1]), new Date(task[2]))) {
+        if (isBetween(day, new Date(task["start"]), new Date(task["due"]))) {
           line = line + "active "
           activated = true
         } else if (activated) {
@@ -425,10 +446,10 @@ You should have received a copy of the GNU Affero General Public License along w
       if (left) {
         line = line + " left-over"
       }
-      if (!activated && task[4] != 100) {
+      if (!activated && task["progress"] != 100) {
         line = line + " overdue"
       }
-      line = line + "'><p>"+task[0]+"</p></div></div>"
+      line = line + "'><p>"+task["name"]+"</p></div></div>"
       if (activated || overdue) {
         output = output + line
       }
@@ -463,12 +484,12 @@ You should have received a copy of the GNU Affero General Public License along w
     var output = ""
     var newButton = "<img id='new-button' src='https://github.com/Tuestech/images/raw/main/New%20Button.png' class='new-button' onclick='newTask()'>"
     var taskColors = ["#E87070", "#FFD450", "#67E690"] // Red, yellow, green
-    for (var i=0; i<data.length; i++) {
+    for (var i=0; i<objects.length; i++) {
       var color
-      task = data[i]
-      days = daysBetween(clearDate(new Date(task[2])), clearDate(new Date()))
+      task = objects[i]
+      days = daysBetween(clearDate(new Date(task["due"])), clearDate(new Date()))
       dayString = days + " days left"
-      if (task[4] == 100) {
+      if (task["progress"] == 100) {
         dayString = "Done!"
       } else if (days == 1) {
         dayString = days + " day left"
@@ -477,7 +498,7 @@ You should have received a copy of the GNU Affero General Public License along w
       } else if (days < 0) {
         dayString = "Overdue!"
       }
-      if (task[4] == 100) {
+      if (task["progress"] == 100) {
         color = taskColors[2]
       } else if (days <= 1) {
         color = taskColors[0]
@@ -486,14 +507,14 @@ You should have received a copy of the GNU Affero General Public License along w
       } else {
         color = taskColors[2]
       }
-      output = output + "<div id='task-item-"+i+"' class='item'><div class='task'><a>"+task[0]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><input onchange='progressChange("+i+")' onwheel='scrollslide(event, "+i+")' type='range' min='1' max='100' value='"+task[4]+"' class='slider' id='progress-slider"+i+"'></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
+      output = output + "<div id='task-item-"+i+"' class='item'><div class='task'><a>"+task["name"]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><input onchange='progressChange("+i+")' onwheel='scrollslide(event, "+i+")' type='range' min='1' max='100' value='"+task["progress"]+"' class='slider' id='progress-slider"+i+"'></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
     }
     document.getElementById("tasks-items").innerHTML = output + newButton
     if (fadeTasks) {
-      for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < objects.length; i++) {
         fade("task-item-"+i, 50*i, 0.5)
       }
-      fade("new-button", data.length * 50, 0.5)
+      fade("new-button", objects.length * 50, 0.5)
     }
   }
   function newTask() {
@@ -503,17 +524,17 @@ You should have received a copy of the GNU Affero General Public License along w
     document.getElementById("link-input").value = ""
 
     document.getElementById("edit-overlay").setAttribute("style", "display: grid;")
-    document.getElementById("ok").setAttribute("onclick", "okButton("+data.length+")")
+    document.getElementById("ok").setAttribute("onclick", "okButton("+objects.length+")")
     document.getElementById("ok").onclick = function() {
-      okButton(data.length);
+      okButton(objects.length);
     }
   }
   function editButton(index) {
     // Set edit panel values to existing values in data
-    document.getElementById("name-input").value = data[index][0]
-    document.getElementById("start-input").valueAsDate = new Date(data[index][1])
-    document.getElementById("due-input").valueAsDate = new Date(data[index][2])
-    document.getElementById("link-input").value = data[index][5]
+    document.getElementById("name-input").value = objects[index]["name"]
+    document.getElementById("start-input").valueAsDate = new Date(objects[index]["start"])
+    document.getElementById("due-input").valueAsDate = new Date(objects[index]["due"])
+    document.getElementById("link-input").value = objects[index]["link"]
     if (document.getElementById("link-input").value == "undefined") {
       document.getElementById("link-input").value = ""
     }
@@ -541,16 +562,16 @@ You should have received a copy of the GNU Affero General Public License along w
       return
     }
     
-    if (typeof data[index] === "undefined") {
-      data[index] = ["", "", "", 0, 0, ""]
+    if (typeof objects[index] === "undefined") {
+      objects[index] = ["", "", "", 0, 0, ""]
     }
-    data[index][0] = safeString(name)
-    data[index][1] = new Date(start)
-    data[index][2] = new Date(due)
+    objects[index]["name"] = safeString(name)
+    objects[index]["start"] = new Date(start)
+    objects[index]["due"] = new Date(due)
     if (link != "") {
-      data[index][5] = safeString(link)
+      objects[index]["link"] = safeString(link)
     } else {
-      data[index][5] = ""
+      objects[index]["link"] = ""
     }
     forceUpdate()
     closeOverlay()
@@ -560,9 +581,10 @@ You should have received a copy of the GNU Affero General Public License along w
     document.getElementById("edit-overlay").setAttribute("style", "display: none;")
   }
   function deleteTask(index) {
-    data = data.remove(index)
-    if (data.length == 0) {
-      data.push(["Create a task", new Date(), new Date(), 0, 0, ""])
+    objects = objects.remove(index)
+    if (objects.length == 0) {
+      let task = new Task()
+      objects.push(task.fromArray(["Create a task", new Date(), new Date(), 0, 0, ""]))
     }
     updateTasks()
     forceUpdate()
@@ -570,7 +592,7 @@ You should have received a copy of the GNU Affero General Public License along w
   }
   function progressChange(index) {
     var value = document.getElementById("progress-slider"+index).value
-    data[index][4] = value
+    objects[index][4] = value
     updateTasks(false)
   }
   function scrollslide(event, index) {
@@ -589,7 +611,7 @@ You should have received a copy of the GNU Affero General Public License along w
       newSize = 100
     }
     event.target.value = newSize
-    data[index][4] = newSize
+    objects[index]["progress"] = newSize
     needUpdate = true
     updateTasks(false);
   }
@@ -620,7 +642,8 @@ You should have received a copy of the GNU Affero General Public License along w
   function deleteAll() {
     button = document.getElementById("delete-data")
     if (button.innerText == "Click to confirm") {
-      data = [["Example", new Date(), new Date(), 0, 50, "https://tues.tech"]]
+      let task = new Task()
+      objects = [task.fromArray(["Example", new Date(), new Date(), 0, 50, "https://tues.tech"])]
       linkdata = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
       forceUpdate()
       button.innerText = "Delete All Data"
