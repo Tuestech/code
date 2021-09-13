@@ -660,7 +660,7 @@ You should have received a copy of the GNU Affero General Public License along w
       element.setAttribute("style", "font-weight: normal;")
     }
     document.getElementById(scoreType).innerHTML = "Selected"
-    document.getElementById(scoreType).setAttribute("style", "font-weight: bold;")
+    document.getElementById("img"+scoreType).setAttribute("style", "font-weight: bold; filter: brightness(80%);")
   }
   function setScoreType(type) {
     if (type == 3) {
