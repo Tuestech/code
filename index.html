@@ -1,20 +1,36 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
   <head>
     <base target="_self">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Tuesday</title>
+
+		<link rel="icon" href="{% static 'Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
+		<link rel="icon" href="{% static 'Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
+		<link rel="icon" href="{% static 'Favicon Light.png'%}" media="(prefers-color-scheme:light)">
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <?!= include('Stylesheet'); ?>
+    <link rel="stylesheet" href="{% static 'styles.css'%}">
   </head>
   <body onbeforeunload="unload()">
+		<form action="editdata" method="post" style="display: none;" id="form">
+			{% csrf_token %}
+			<input type="text" name="uid">
+			<input type="text" name="data">
+		</form>
+		<div id="data" style="display: none;">{{data}}</div>
+		<div id="uid" style="display: none;">{{uid}}</div>
     <div id="loading">
       <div></div>
       <div>
         <img id = "logo" src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
         <h1>Loading...</h1>
-        <p>Not working? Try a <a href="https://tues.tech/setup.html">full reset</a>.</p>
+        <p>Not working? Try a <a href="https://tues.tech/reset/confirm">full reset</a>.</p>
       </div>
       <div></div>
     </div>
@@ -22,19 +38,19 @@
       <div class="nav">
         <img id = "logo" src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
         <div onclick="setPage('dash')" class="nav-item" id = "dash">
-          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Dashboard%20Icon.png"></a>
-          <a href="#" class="nav-link">Dashboard</a>
+          <img src="https://github.com/Tuestech/images/raw/main/Google%20Dashboard%20Icon.png">
+          <p class="nav-link">Dashboard</p>
         </div>
         <div onclick="setPage('tasks')" class="nav-item" id = "tasks">
-          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Tasks%20Icon.png"></a>
-          <a href="#" class="nav-link">Tasks</a>
+          <img src="https://github.com/Tuestech/images/raw/main/Google%20Tasks%20Icon.png">
+          <p class="nav-link">Tasks</p>
         </div>
         <div onclick="setPage('settings')" class="nav-item" id = "settings">
-          <a href="#"><img src="https://github.com/Tuestech/images/raw/main/Google%20Settings%20Icon.png"></a>
-          <a href="#" class="nav-link">Settings</a>
+          <img src="https://github.com/Tuestech/images/raw/main/Google%20Settings%20Icon.png">
+          <p class="nav-link">Settings</p>
         </div>
       </div>
-      <div id = "dash body" class="dash main">
+      <div id = "dash body" class="dash main" style="display: none;">
         <header>Dashboard</header>
         <div id="today">
           <div id="today-container">
@@ -68,7 +84,7 @@
           <a href="https://www.google.com" target="_blank"><div><img src="https://github.com/Tuestech/images/raw/main/Dashboard_Icon.png"><p>asdfasdf</p></div></a>
         </div>
       </div>
-      <div id = "tasks body" class="tasks main">
+      <div id = "tasks body" class="tasks main" style="display: none;">
 				<header>Tasks</header>
 				<div class="container">
 					<div class="labels">
@@ -106,7 +122,7 @@
 					</div>
 				</div>
 			</div>
-      <div id = "settings body" class="settings main">
+      <div id = "settings body" class="settings main" style="display: none;">
         <header>Settings</header>
 				<div class="curves settings-panel">
 					<div class="header">
@@ -182,6 +198,6 @@
         </div>
       </div>
     </div>
-    <?!= include('Javascript'); ?>
+    <script type="text/javascript" src="{% static 'script.js'%}"></script>
   </body>
 </html>
