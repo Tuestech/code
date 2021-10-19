@@ -57,16 +57,11 @@ After a suggestion is submited, you can track out progress and see your idea com
 
 ### Testing setup
 
-This is designed to be run in a Google Apps Script(GAS) web-app.
+This is just the HTML, CSS, and JS of a Django app. Template tags such as {{uid}} and {{data}} can be assumed to always return valid values and always be present.
 
-Copy all the files to the GAS project.
-Note that all file names must be capitalized for the scriptlets to work.
+When testing new features, it may be necessary to use sample data in place of the template tags.
 
-When deploying, select web-app. Once deployed, you can use the versioned deployment or the test deployment.
-
-We recommend using the test deployment when testing and debugging. Test deployments run from the most recently saved file, while versioned deployments will only run the files in the state that they were in when deployed.
-
-[GAS web-app docs](https://developers.google.com/apps-script/guides/web?hl=en)
+For testing, we recommend removing the body of the `setData` function or replacing it with a way you can monitor. Remember to repair all changes prior to submitting a pull request.
 
 &nbsp;
 
