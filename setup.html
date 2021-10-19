@@ -2,6 +2,7 @@
 <html>
   <head>
     <base target="_top">
+		<title>Tuesday</title>
 		<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
 		<style>
 			* {
@@ -88,6 +89,9 @@
 				font-size: 15px;
 				text-align: center;
 			}
+			.active {
+				filter: brightness(80%);
+			}
 		</style>
   </head>
   <body>
@@ -119,15 +123,15 @@
 			<br>
 			<br>
 			<div class="curves">
-				<div class="curve" onclick="setData(0)">
+				<div id="curve0" class="curve" onclick="setData(0)">
 					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%201%20blue.png">
 					<p>1. Recommended</p>
 				</div>
-				<div class="curve" onclick="setData(1)">
+				<div id="curve1" class="curve" onclick="setData(1)">
 					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%202%20blue.png">
 					<p>2. Average</p>
 				</div>
-				<div class="curve" onclick="setData(2)">
+				<div id="curve2" class="curve" onclick="setData(2)">
 					<img src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%203%20blue.png">
 					<p>3. Get Ahead</p>
 				</div>
@@ -152,7 +156,7 @@
 				Privacy Policy: <a href="https://tuestech.weebly.com/privacy-policy.html">https://tuestech.weebly.com/privacy-policy.html</a>
 				<br>
 				<br>
-				When you're ready, <a href="https://www.tues.tech">click here</a> to start using Tuesday.
+				When you're ready, <a href="https://www.tues.tech">click here</a> to finish setup.
         <br>
 			</p>
 		</div>
@@ -160,7 +164,8 @@
 
     <script>
       var page = 1
-      var data = null
+			let uid = {{uid}}
+      var other = "Create a task<item>Wed Sep 29 2021 00:00:00 GMT-0500 (Central Daylight Time)<item>Wed Sep 29 2021 00:00:00 GMT-0500 (Central Daylight Time)<item>Infinity<item>0<item>https://tues.tech<item>undefined<item><list><data>https://classroom.google.com/<item>Classroom<item><list>https://aps.elmhurst205.org/guardian/home.html<item>Powerschool<item><list>www.google.com<item>test<item><list>"
       var scoreType = 0
       var previousElement = null
       var previousText = null
@@ -175,28 +180,31 @@
         page += 1
         document.getElementById(page).setAttribute("style", "display: block")
       }
-      function getData(scoreType) {
-        google.script.run.withSuccessHandler(onSuccess).getData()
-        function onSuccess(value) {
-          data = value
-        }
-      }
-      function setData(scoreType) {
-        if (data == null) {
-          setTimeout(function() {
-            setData()
-          }, 300)
-        }
-        var other = data.substring(0, data.length-1)
-        data = other + scoreType
-        google.script.run.setData(data)
-      }
+			function setData(scoreType) {
+				let xhr = null;
+				let encoded = other+"<data>"+scoreType
+				const url = "/editdata/";
+				if (window.XMLHttpRequest) {
+					xhr = new XMLHttpRequest();
+				}
+				else if (window.ActiveXObject) {
+					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xhr.open('POST', url, true);
+				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				xhr.send("uid="+uid+"&data="+encoded);
+				select(document.getElementById("curve"+scoreType))
+			}
       function select(element) {
-        previousElement.innerText = previousText
-        previousText = element.innerText
-        element.innerText = "Selected"
+				clearSelect()
+				element.setAttribute("class", "curve active")
       }
-      getData()
+			function clearSelect() {
+				for (var i = 0; i < 3; i++) {
+					let curve = document.getElementById("curve"+i)
+					curve.setAttribute("class", "curve")
+				}
+			}
     </script>
   </body>
 </html>
