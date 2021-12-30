@@ -7,14 +7,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Tuesday</title>
+		<title>Tuesday - App</title>
 
-		<link rel="icon" href="{% static 'Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
-		<link rel="icon" href="{% static 'Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
-		<link rel="icon" href="{% static 'Favicon Light.png'%}" media="(prefers-color-scheme:light)">
+		<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
+		<link rel="icon" href="{% static 'Images/Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
+		<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:light)">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="{% static 'Lexend.css'%}">
+    <link rel="stylesheet" href="{% static 'Roboto.css'%}">
     <link rel="stylesheet" href="{% static 'styles.css'%}">
   </head>
   <body onbeforeunload="unload()">
@@ -28,7 +28,7 @@
     <div id="loading">
       <div></div>
       <div>
-        <img id = "logo" src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
+        <img id = "logo" src="{% static 'Images/Tuesday Logo Modern Angles with Box (gray).png'%}">
         <h1>Loading...</h1>
         <p>Not working? Try a <a href="https://tues.tech/reset/confirm">full reset</a>.</p>
       </div>
@@ -36,17 +36,21 @@
     </div>
     <div id="body">
       <div class="nav">
-        <img id = "logo" src="https://github.com/Tuestech/images/raw/main/Tuesday%20Logo%20Modern%20Angles%20with%20Box%20(gray).png">
+        <img id = "logo" src="{% static 'Images/Tuesday Logo Modern Angles with Box (gray).png'%}">
         <div onclick="setPage('dash')" class="nav-item" id = "dash">
-          <img src="https://github.com/Tuestech/images/raw/main/Google%20Dashboard%20Icon.png">
+          <img src="{% static 'Images/Google Dashboard Icon.png'%}">
           <p class="nav-link">Dashboard</p>
         </div>
         <div onclick="setPage('tasks')" class="nav-item" id = "tasks">
-          <img src="https://github.com/Tuestech/images/raw/main/Google%20Tasks%20Icon.png">
+          <img src="{% static 'Images/Google Tasks Icon.png'%}">
           <p class="nav-link">Tasks</p>
         </div>
+				<div onclick="setPage('timer')" class="nav-item" id = "timer">
+          <img src="{% static 'Images/timer.svg'%}">
+          <p class="nav-link">Timer</p>
+        </div>
         <div onclick="setPage('settings')" class="nav-item" id = "settings">
-          <img src="https://github.com/Tuestech/images/raw/main/Google%20Settings%20Icon.png">
+          <img src="{% static 'Images/Google Settings Icon.png'%}">
           <p class="nav-link">Settings</p>
         </div>
       </div>
@@ -81,7 +85,7 @@
           </div>
         </div>
         <div id="links">
-          <a href="https://www.google.com" target="_blank"><div><img src="https://github.com/Tuestech/images/raw/main/Dashboard_Icon.png"><p>asdfasdf</p></div></a>
+          <a href="https://www.google.com" target="_blank"><div><img src="{% static 'Images/Google Dashboard Icon.png'%}"><p>asdfasdf</p></div></a>
         </div>
       </div>
       <div id = "tasks body" class="tasks main" style="display: none;">
@@ -99,10 +103,10 @@
 								<div class="time">3 days left</div>
 								<div onwheel="scrollslide(event)" class="progress-container"><div class="progress-bar"></div></div>
 							</div>
-							<img src="https://github.com/Tuestech/images/raw/main/Edit_Button.png" class="task-edit">
-							<img src="https://github.com/Tuestech/images/raw/main/Delete_Button.png" class="task-delete">
+							<img src="{% static 'Images/Google Edit Icon.png'%}" class="task-edit">
+							<img src="{% static 'Images/Google Delete Icon.png'%}" class="task-delete">
 						</div>
-            <img src="https://github.com/Tuestech/images/raw/main/New%20Button.png" class="new-button">
+            <img src="{% static 'Images/New Button.png'%}" class="new-button">
 					</div>
 				</div>
 				<div id="edit-overlay" class="edit" style="display: none;">
@@ -122,6 +126,50 @@
 					</div>
 				</div>
 			</div>
+			<div id="timer body" class="timer main" style="display: none;">
+				<header>Timer</header>
+				<div class="panel" id="sequence">
+					<h2>Sequence</h2>
+					<button onclick="ding(0)" id="0" data-minutes="25" class="card">
+						<h3>Work</h3>
+						<p>25 minutes</p>
+					</button>
+					<button onclick="ding(1)" id="1" data-minutes="5" class="card">
+						<h3>Break</h3>
+						<p>5 minutes</p>
+					</button>
+					<button onclick="ding(2)" id="2" data-minutes="25" class="card">
+						<h3>Work</h3>
+						<p>25 minute</p>
+					</button>
+					<button onclick="ding(3)" id="3" data-minutes="5" class="card">
+						<h3>Break</h3>
+						<p>5 minutes</p>
+					</button>
+					<button onclick="ding(4)" id="4" data-minutes="25" class="card">
+						<h3>Work</h3>
+						<p>25 minute</p>
+					</button>
+					<button onclick="ding(5)" id="5" data-minutes="5" class="card">
+						<h3>Break</h3>
+						<p>5 minutes</p>
+					</button>
+					<button onclick="ding(6)" id="6" data-minutes="25" class="card">
+						<h3>Work</h3>
+						<p>25 minute</p>
+					</button>
+					<button onclick="ding(7)" id="7" data-minutes="30" class="card">
+						<h3>Break</h3>
+						<p>30 minutes</p>
+					</button>
+				</div>
+				<div class="panel" id="time">
+					<h3 class="ticker" style="grid-area: time" id="ticker">25:00</h3>
+					<button class="timer-nav" style="grid-area: back;" onclick="nextTimer(true)"><img src="/static/Images/fast_rewind.svg"></button>
+					<button class="timer-nav play-pause" style="grid-area: pause;" onclick="pauseTimer()"><img id="pause-img" src="/static/Images/play.svg"></button>
+					<button class="timer-nav" style="grid-area: forward;" onclick="nextTimer()"><img src="/static/Images/fast_forward.svg"></button>
+				</div>
+			</div>
       <div id = "settings body" class="settings main" style="display: none;">
         <header>Settings</header>
 				<div class="curves settings-panel">
@@ -138,19 +186,19 @@
 						</div>
 					</div>
 					<div class="curve">
-						<img id="img0" onclick="setScoreType(0)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%201%20blue.png">
+						<img id="img0" onclick="setScoreType(0)" src="{% static 'Images/prog_curve option 1 blue.png'%}">
 						<p id="0" class="1. Recommended">1. Recommended</p>
 					</div>
 					<div class="curve">
-						<img id="img1" onclick="setScoreType(1)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%202%20blue.png">
+						<img id="img1" onclick="setScoreType(1)" src="{% static 'Images/prog_curve option 2 blue.png'%}">
 						<p id="1" class="2. Average">2. Average</p>
 					</div>
 					<div class="curve">
-						<img id="img2" onclick="setScoreType(2)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%203%20blue.png">
+						<img id="img2" onclick="setScoreType(2)" src="{% static 'Images/prog_curve option 3 blue.png'%}">
 						<p id="2" class="3. Get Ahead">3. Get Ahead</p>
 					</div>
 					<div class="curve">
-						<img onclick="setScoreType(3)" src="https://github.com/Tuestech/images/raw/main/progress-curves/prog_curve%20option%204%20blue.png">
+						<img onclick="setScoreType(3)" src="{% static 'Images/prog_curve option 4 blue.png'%}">
 						<p id="procrastinator">4. Procrastinator</p>
 					</div>
 				</div>
@@ -158,19 +206,19 @@
 					<h2>Quick Access Links:</h2>
 					<div id="settings-links" class="items">
 						<div class="item">
-							<img src="https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png">
+							<img src="{% static 'Images/Google Web Icon.png'%}">
 							<p>Link</p>
-							<img class="link-edit" src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'>
-							<img class="link-delete" src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'>
+							<img class="link-edit" src="{% static 'Images/New_Edit_Button.png'%}">
+							<img class="link-delete" src="{% static 'Images/New_Delete_Button.png'%}">
 						</div>
 						<div class="item">
-							<img src="https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png">
+							<img src="{% static 'Images/Google Web Icon.png'%}">
 							<p>Link</p>
-							<img class="link-edit" src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'>
-							<img class="link-delete" src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'>
+							<img class="link-edit" src="{% static 'Images/New_Edit_Button.png'%}">
+							<img class="link-delete" src="{% static 'Images/New_Delete_Button.png'%}">
 						</div>
 					</div>
-          <img onclick="newLink()" src="https://github.com/Tuestech/images/raw/main/New%20Button.png" class="new-button">
+          <img onclick="newLink()" src="{% static 'Images/New Button.png'%}" class="new-button">
 				</div>
 				<div class="other settings-panel">
 					<h2>Other</h2>
@@ -198,6 +246,42 @@
         </div>
       </div>
     </div>
+		<script>
+			// Service worker
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.getRegistrations().then(function(registrations) {
+						console.log("Deleting")
+						for(let registration of registrations) {
+							registration.unregister()
+						}
+					}).catch(
+						function(err) {
+							console.log(err)
+						}
+					)
+					// navigator.serviceWorker.register('/sw8.js').then(function(registration) {
+					// 	console.log('ServiceWorker registered')
+					// 	navigator.serviceWorker.getRegistrations().then(function(registrations) {
+					// 		console.log("Updating")
+					// 		for(let registration of registrations) {
+					// 			registration.unregister()
+					// 		}
+					// 		navigator.serviceWorker.register('/sw8.js').then(
+					// 			function(registration) {
+					// 				console.log("Updated")
+					// 			}).catch(
+					// 			function(err) {
+					// 				console.log("Update failed")
+					// 			}
+					// 		)
+					// 	})
+					// }, function(err) {
+					// 	console.log('ServiceWorker registration failed: ', err)
+					// })
+				})
+			}
+		</script>
     <script type="text/javascript" src="{% static 'script.js'%}"></script>
   </body>
 </html>
