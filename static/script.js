@@ -7,17 +7,50 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see https:\/\/www.gnu.org\/licenses\/.
 `)
 
-// Version updates
-setInterval(function() {
-	window.location.replace("https://tues.tech");
-}, 1000*60*60*24)
+console.log("Test3 electric boogaloo")
 
-// Offline data updates
-window.addEventListener('online', function(e) { console.log('online'); });
+// Updates
+let latest_get = new Date()
+let latest_date = new Date()
+
+let previous_objects = null
+
+setInterval(function() {
+	if (previous_objects == null) {
+		previous_objects = [...objects]
+	}
+	
+	if (encodeAll(previous_objects) != encodeAll(objects)) {
+		latest_date = new Date()
+	}
+	previous_objects = objects
+	
+	if (daysBetween(latest_get, new Date()) != 0) {
+		if (document.visibilityState != "visible" && navigator.onLine) {
+			window.location.replace("https://tues.tech");
+		} else {
+			if (page == "dash") {
+				updateDashboard()
+			} else if (page == "tasks") {
+				updateTasks(false)
+			}
+			latest_get = new Date()
+		}
+	}
+}, 1000*60)
+
+// CoWriter is bad
+window.addEventListener('load', function () {
+  let idots = document.getElementsByTagName("html")[0].children
+	for (var i = 0; i < idots.length; i++) {
+		if (i > 1) {
+			idots[i].setAttribute("style", "display: none;")
+		}
+	}
+})
 
 // Get user ID
 const uid = document.getElementById("uid").innerText
-console.log(document.getElementById("uid"))
 
 // CSRF
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -26,7 +59,7 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 var scoreType = 0
 
 // Favicon website pairs
-var imagePairs = [["classroom.google.com", "https://github.com/Tuestech/images/raw/main/google-classroom.svg"], ["aps.elmhurst205.org", "https://github.com/Tuestech/images/raw/main/ps_logo_lg.png"]]
+var imagePairs = [["classroom.google.com", "/static/Images/google-classroom.svg"], ["aps.elmhurst205.org", "/static/Images/ps_logo_lg.png"]]
 
 // Array
 Array.prototype.remove = function(index) {
@@ -44,10 +77,11 @@ Array.prototype.remove = function(index) {
 var page = "dash"
 
 // Data Management
-var data = null;
+var data = null
 var objects = []
 var sorted = null
-var linkdata = "a";
+var linkdata = "a"
+
 function httpGetAsync(theUrl, callback) {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() { 
@@ -57,6 +91,7 @@ function httpGetAsync(theUrl, callback) {
 	xmlHttp.open("GET", theUrl, true);
 	xmlHttp.send(null);
 }
+
 class Task {
 	constructor(name="", start=new Date(), due=new Date(), classq="", priority=-999, progress=0, link="") {
 		this.name = name;
@@ -96,14 +131,13 @@ function encrypt(input) {
 	for (row of input) {
 		var item;
 		for (item of row) {
-			// output = output + item + "Ĭ"
 			output = output + item + "<item>"
 		}
-		// output = output + "Ł"
 		output = output + "<list>"
 	}
 	return output
 }
+
 function decrypt(input) {
 	if (input == null) {
 		return null;
@@ -136,6 +170,7 @@ function decrypt(input) {
 	}
 	return clean(output)
 }
+
 function clean(input) {
 	var output = []
 	var item;
@@ -150,6 +185,7 @@ function clean(input) {
 	}
 	return output
 }
+
 function formatLink(link) {
 	if (link.substring(0, 8) != "https://") {
 		if (link.substring(0, 7) != "http://") {
@@ -158,14 +194,20 @@ function formatLink(link) {
 	}
 	return link;
 }
-function setData() {
+
+function encodeAll(obj_arr) {
 	let arrayData = []
-	let xhr = null;
-	for (var i = 0; i < objects.length; i++) {
-		arrayData.push(objects[i].toArray())
+	for (var i = 0; i < obj_arr.length; i++) {
+		arrayData.push(obj_arr[i].toArray())
 	}
 	let encoded = encrypt(arrayData)+"<data>"+encrypt(linkdata)+"<data>"+scoreType
 	encoded = encoded.replaceAll("&", "{amp}")
+	return encoded
+}
+
+function setData() {
+	let xhr = null;
+	let encoded = encodeAll(objects)
 	const url = "/editdata/";
 	if (window.XMLHttpRequest) {
 		xhr = new XMLHttpRequest();
@@ -176,14 +218,16 @@ function setData() {
 	xhr.open('POST', url, true);
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.setRequestHeader('X-CSRF-Token', csrftoken);
-	xhr.send("uid="+uid+"&data="+encoded);
+	xhr.send("uid="+uid+"&data="+encoded+"&date="+latest_date);
 }
+
 function setScores() {
 	var task;
 	for (task of objects) {
 		task["priority"] = score(task)
 	}
 }
+
 function sortData() {
 	setScores()
 	var output = [...objects]
@@ -191,6 +235,7 @@ function sortData() {
 	sorted = output
 	return output
 }
+
 function startup() {
 	let value = document.getElementById("data").innerText
 	var decrypted = decrypt(value)
@@ -201,7 +246,6 @@ function startup() {
 		task.fromArray(array)
 		objects.push(task)
 	}
-	console.log(objects)
 	linkdata = decrypted[1]
 	showPage()
 	document.getElementById("loading").style.opacity = 0;
@@ -212,6 +256,7 @@ function startup() {
 function hideAll() {
 	document.getElementById("dash body").setAttribute("style", "display: none")
 	document.getElementById("tasks body").setAttribute("style", "display: none")
+	document.getElementById("timer body").setAttribute("style", "display: none")
 	document.getElementById("settings body").setAttribute("style", "display: none")
 }
 function showPage() {
@@ -225,6 +270,8 @@ function showPage() {
 	} else if (page == "settings") {
 		document.getElementById("settings body").setAttribute("style", "display: grid")
 		updateSettings()
+	} else if (page == "timer") {
+		document.getElementById("timer body").setAttribute("style", "display: grid")
 	}
 }
 function setPage(name) {
@@ -234,12 +281,12 @@ function setPage(name) {
 
 // Javascript date objects are bad
 function getDate() {
-	var today = new Date()
+	var today = clearDate(new Date())
 	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-	var day = days[today.getUTCDay()]
+	var day = days[today.getDay()]
 	var year = today.getFullYear()
 	var month = today.getMonth()
-	var date = today.getUTCDate()
+	var date = today.getDate()
 	return [day, month, date, year]
 }
 function clearDate(date) {
@@ -305,7 +352,7 @@ function unload() {
 // Calculation
 function score(task) {
 	if (task["progress"] == 100) {
-		return -999
+		return -9999999999
 	}
 	// Set coefficient and exponent
 	var coef = "a"
@@ -327,10 +374,17 @@ function score(task) {
 
 	// Progress Deviation
 	var prog = daysBetween(new Date(), new Date(task["start"]))/daysBetween(new Date(task["due"]), new Date(task["start"]))
+	if (daysBetween(new Date(task["due"]), new Date(task["start"])) == 0) {
+		if (daysBetween(new Date(), new Date(task["start"])) >= 0) {
+			prog = 100
+		} else {
+			prog = 0
+		}
+	}
 	prog = prog * 100
 	var expected;
 	if (prog < 0) {
-		expected = 0
+		expected = -100
 	} else {
 		expected = (coef*prog)**exp
 	}
@@ -378,7 +432,7 @@ function setToday() {
 		if (task["progress"] != 100) {
 			output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "' onchange = 'todayButton("+ i +")'><label for = 'todaybutton" + i + "'></label></div>"
 		} else  {
-			output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'>✔</label></div>"
+			output = output + "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + i + "'  onchange = 'todayButton("+ i +")' checked><label for = 'todaybutton" + i + "'></label></div>"
 		}
 		if (task["progress"] <= 40) {
 			color = colors[0]
@@ -421,8 +475,6 @@ function todayButton(index) {
 }
 function setTimeline() {
 	var output = ""
-	var date = getDate()
-	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 	var today = new Date()
 	var index = today.getDay()
@@ -480,7 +532,7 @@ function setTimeline() {
 function setLinks() {
 	var output = ""
 	function generate(name, link) {
-		var image = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
+		var image = "/static/Images/Google Web Icon.png"
 		var pair
 		for (pair of imagePairs) {
 			var pairLink = pair[0]
@@ -500,7 +552,7 @@ function setLinks() {
 // Tasks
 function updateTasks(fadeTasks=true) {
 	var output = ""
-	var newButton = "<img id='new-button' src='https://github.com/Tuestech/images/raw/main/New%20Button.png' class='new-button' onclick='newTask()'>"
+	var newButton = "<img id='new-button' src='/static/Images/New Button.png' class='new-button' onclick='newTask()'>"
 	var taskColors = ["#E87070", "#FFD450", "#67E690"] // Red, yellow, green
 	for (var i=0; i<objects.length; i++) {
 		var color
@@ -525,7 +577,7 @@ function updateTasks(fadeTasks=true) {
 		} else {
 			color = taskColors[2]
 		}
-		output = output + "<div id='task-item-"+i+"' class='item'><div class='task'><a>"+task["name"]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><input onchange='progressChange("+i+")' onwheel='scrollslide(event, "+i+")' type='range' min='1' max='100' value='"+task["progress"]+"' class='slider' id='progress-slider"+i+"'></div><img onclick='editButton("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png' class='task-delete'></div>"
+		output = output + "<div id='task-item-"+i+"' class='item'><div class='task'><a>"+task["name"]+"</a><div class='time' style='background-color: "+color+";'>"+dayString+"</div><input onchange='progressChange("+i+")' onwheel='scrollslide(event, "+i+")' type='range' min='1' max='100' value='"+task["progress"]+"' class='slider' id='progress-slider"+i+"'></div><img onclick='editButton("+i+")' src='/static/Images/New_Edit_Button.png' class='task-edit'><img onclick='deleteTask("+i+")' src='/static/Images/New_Delete_Button.png' class='task-delete'></div>"
 	}
 	document.getElementById("tasks-items").innerHTML = output + newButton
 	if (fadeTasks) {
@@ -634,12 +686,88 @@ function scrollslide(event, index) {
 	needUpdate = true
 	updateTasks(false);
 }
+// Timer
+let audio = new Audio("/static/Ding.mp3")
+const original_title = document.title
+let timer_pos = 0
+let timer_paused = true
+let timer_time = [5, 0]
+let timer_loop = null
+function timer_tick() {
+	timer_time[1] = timer_time[1] - 1
+	if (timer_time[1] < 0) {
+		timer_time[0] = timer_time[0] -1
+		timer_time[1] = 60 + timer_time[1]
+	}
+	if (timer_time[0] < 0) {
+		nextTimer()
+	}
+	document.getElementById("ticker").innerText = toTimeString(timer_time)
+}
+function ding(index) {
+	// Play audio and update title
+	audio.currentTime = 0
+	audio.play()
+	console.log("Ding!")
+	document.title = "Time up!"
+	setTimeout(function() {
+		document.title = original_title
+	}, 2000)
+
+	// Set active
+	let cards = document.getElementsByClassName("card")
+	for (let i = 0; i < cards.length; i++) {
+		cards[i].setAttribute("class", "card")
+	}
+	timer_pos = index
+	cards[index].setAttribute("class", "card active")
+	timer_time = [cards[index].getAttribute("data-minutes"), 0]
+	timer_tick()
+}
+function nextTimer(reversed = false) {
+	if (reversed && timer_pos == 0) {
+		timer_pos = 7
+	} else if (timer_pos == 7) {
+		timer_pos = 0
+	}
+	if (reversed) {
+		timer_pos--
+	} else {
+		timer_pos++
+	}
+	let cards = document.getElementsByClassName("card")
+	timer_time = [cards[timer_pos].getAttribute("data-minutes"), 0]
+	ding(timer_pos)
+}
+function pauseTimer() {
+	if (timer_paused) {
+		timer_paused = false
+		document.getElementById("pause-img").setAttribute("src", "/static/Images/pause.svg")
+		timer_loop = setInterval(timer_tick, 1000)
+	} else {
+		timer_paused = true
+		document.getElementById("pause-img").setAttribute("src", "/static/Images/play.svg")
+		clearInterval(timer_loop)
+	}
+}
+function toTimeString(time) {
+	let output = ""
+	output += time[0]
+	output += ":"
+	if (time[1] < 10) {
+		output += "0"
+	}
+	output += time[1]
+	return output
+}
+ding(timer_pos)
+
 
 // Settings
 function updateSettings() {
 	var output = ""
 	function generate(name, link, index) {
-		var image = "https://github.com/Tuestech/images/raw/main/Google%20Web%20Icon.png"
+		var image = "/static/Images/Google Web Icon.png"
 		var pair
 		for (pair of imagePairs) {
 			var pairLink = pair[0]
@@ -649,7 +777,7 @@ function updateSettings() {
 			}
 		}
 
-		return "<div class='item'><img src='"+image+"'><p>"+name+"</p><img onclick='linkEditButton("+index+")' class='link-edit' src='https://github.com/Tuestech/images/raw/main/New_Edit_Button.png'><img onclick='deleteLink("+index+")' class='link-delete' src='https://github.com/Tuestech/images/raw/main/New_Delete_Button.png'></div>"
+		return "<div class='item'><img src='"+image+"'><p>"+name+"</p><img onclick='linkEditButton("+index+")' class='link-edit' src='/static/Images/New_Edit_Button.png'><img onclick='deleteLink("+index+")' class='link-delete' src='/static/Images/New_Delete_Button.png'></div>"
 	}
 	for (var i = 0; i < linkdata.length; i++) {
 		var link = linkdata[i]
@@ -661,12 +789,7 @@ function updateSettings() {
 function deleteAll() {
 	button = document.getElementById("delete-data")
 	if (button.innerText == "Click to confirm") {
-		let task = new Task()
-		objects = [task.fromArray(["Example", new Date(), new Date(), 0, 50, "https://tues.tech"])]
-		linkdata = ["https://classroom.google.com/", "https://aps.elmhurst205.org/guardian/home.html"]
-		forceUpdate()
-		button.innerText = "Delete All Data"
-		updateSettings()
+		window.location.replace("https://tues.tech/reset/confirm");
 	} else {
 		button.innerText = "Click to confirm"
 		setTimeout(function(){button.innerText = "Delete All Data"}, 2000)
