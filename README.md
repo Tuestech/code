@@ -102,7 +102,7 @@ You can always submit another pull request
 
 Tuesday - Work management tool for students, by students
 
-Copyright © 2021 USSiamaboat & Edison946
+Copyright © 2022 USSiamaboat & Edison946
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
