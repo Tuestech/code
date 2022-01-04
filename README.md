@@ -1,5 +1,5 @@
 # Tuesday
-Tuesday is a smart work management tool that helps you keep track of your tasks, and uses smart algorithms to help you prioritize your work.
+Tuesday is a smart work management tool that uses smart algorithms to help you keep track of and prioritize your tasks.
 
 ## Table of contents
 
@@ -57,7 +57,7 @@ After a suggestion is submited, you can track out progress and see your idea com
 
 ### Testing setup
 
-This is just the HTML, CSS, and JS of a Django app. Template tags such as {{uid}} and {{data}} can be assumed to always return valid values and always be present.
+This is just the HTML, CSS, and JS of a Django app. Template tags such as `{{uid}}` and `{{data}}` can be assumed to always return valid values and always be present.
 
 When testing new features, it may be necessary to use sample data in place of the template tags.
 
