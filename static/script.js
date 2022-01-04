@@ -6,14 +6,39 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see https:\/\/www.gnu.org\/licenses\/.
 `)
+// ----------
 
-console.log("Test3 electric boogaloo")
+// Mobile Detection
+mobile_mode = screen.availWidth <= 600
+// ----------
 
 // Updates
 let latest_get = new Date()
 let latest_date = new Date()
 
 let previous_objects = null
+
+function reloadWhenOnline() {
+	let xhr = null;
+	const url = "https://tues.tech/blank/";
+	if (window.XMLHttpRequest) {
+		xhr = new XMLHttpRequest();
+	}
+	else if (window.ActiveXObject) {
+		xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xhr.open('POST', url, true);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.setRequestHeader('X-CSRF-Token', csrftoken);
+
+	setTimeout(function() {
+    if (xhr.status == 200) {
+      window.location.replace("https://tues.tech/app");
+    }
+  }, 1000)
+
+	xhr.send();
+}
 
 setInterval(function() {
 	if (previous_objects == null) {
@@ -27,7 +52,7 @@ setInterval(function() {
 	
 	if (daysBetween(latest_get, new Date()) != 0) {
 		if (document.visibilityState != "visible" && navigator.onLine) {
-			window.location.replace("https://tues.tech");
+			reloadWhenOnline()
 		} else {
 			if (page == "dash") {
 				updateDashboard()
@@ -38,8 +63,9 @@ setInterval(function() {
 		}
 	}
 }, 1000*60)
+// ----------
 
-// CoWriter is bad
+// Remove misbehaving extensions
 window.addEventListener('load', function () {
   let idots = document.getElementsByTagName("html")[0].children
 	for (var i = 0; i < idots.length; i++) {
@@ -48,18 +74,23 @@ window.addEventListener('load', function () {
 		}
 	}
 })
+// ----------
 
 // Get user ID
 const uid = document.getElementById("uid").innerText
+// ----------
 
 // CSRF
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+// ----------
 
 // Settings
 var scoreType = 0
+// ----------
 
 // Favicon website pairs
 var imagePairs = [["classroom.google.com", "/static/Images/google-classroom.svg"], ["aps.elmhurst205.org", "/static/Images/ps_logo_lg.png"]]
+// ----------
 
 // Array
 Array.prototype.remove = function(index) {
@@ -72,9 +103,11 @@ Array.prototype.remove = function(index) {
 	}
 	return this
 }
+// ----------
 
 // Pagination
 var page = "dash"
+// ----------
 
 // Data Management
 var data = null
@@ -208,7 +241,7 @@ function encodeAll(obj_arr) {
 function setData() {
 	let xhr = null;
 	let encoded = encodeAll(objects)
-	const url = "/editdata/";
+	const url = "https://tues.tech/editdata/";
 	if (window.XMLHttpRequest) {
 		xhr = new XMLHttpRequest();
 	}
@@ -251,6 +284,7 @@ function startup() {
 	document.getElementById("loading").style.opacity = 0;
 	setTimeout(function(){document.getElementById("loading").style.zIndex = -999}, 1500);
 }
+// ----------
 
 // Pages
 function hideAll() {
@@ -278,8 +312,9 @@ function setPage(name) {
 	page = name
 	showPage()
 }
+// ----------
 
-// Javascript date objects are bad
+// Dates
 function getDate() {
 	var today = clearDate(new Date())
 	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -309,6 +344,7 @@ function isBetween(date, datea, dateb) {
 		return false
 	}
 }
+// ----------
 
 // Updates
 var needUpdate = false
@@ -348,6 +384,7 @@ function unload() {
 	}
 	console.log("Unloaded")
 }
+// ----------
 
 // Calculation
 function score(task) {
@@ -400,6 +437,7 @@ function score(task) {
 
 	return expected - task["progress"] + urgency
 }
+// ----------
 
 // Dashboard
 function updateDashboard() {
@@ -457,7 +495,7 @@ function setToday() {
 	}
 	if (output == "") {
 		output = "<div><input class = 'scheck hidden' type='checkbox' id = 'todaybutton" + 0 + "' onchange = 'todayButton("+ 0 +")'><label for = 'todaybutton" + 0 + "'>✔</label></div>"
-		output = "<div id = 'task-name'><a href='" + "tuestech.weebly.com" + "' target='_blank'>" + "Example task" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
+		output += "<div id = 'task-name'><a href='" + "tues.tech" + "' target='_blank'>" + "Example task" + "</a><div style='background-color: " + colors[2] + ";'></div></div>"
 	}
 	document.getElementById("list").innerHTML = output
 }
@@ -548,6 +586,7 @@ function setLinks() {
 	}
 	document.getElementById("links").innerHTML = output
 }
+// ----------
 
 // Tasks
 function updateTasks(fadeTasks=true) {
@@ -686,13 +725,39 @@ function scrollslide(event, index) {
 	needUpdate = true
 	updateTasks(false);
 }
+// ----------
+
 // Timer
+class AccurateTimer {
+	constructor(callback, interval) {
+		this.callback = callback
+		this.interval = interval
+		this.target = new Date().valueOf()
+		this.paused = true
+	}
+	toggle() {
+		this.paused = !this.paused
+		this.target = new Date().valueOf()
+		this.tick()
+	}
+	tick(obj = this) {
+		if (!obj.paused) {
+			obj.target += obj.interval
+			setTimeout(function() {
+				obj.tick(obj)
+				obj.callback()
+			}, obj.target - new Date())
+		}
+	}
+}
+
 let audio = new Audio("/static/Ding.mp3")
 const original_title = document.title
 let timer_pos = 0
 let timer_paused = true
 let timer_time = [5, 0]
-let timer_loop = null
+let timer_loop = new AccurateTimer(timer_tick, 1000)
+
 function timer_tick() {
 	timer_time[1] = timer_time[1] - 1
 	if (timer_time[1] < 0) {
@@ -704,15 +769,17 @@ function timer_tick() {
 	}
 	document.getElementById("ticker").innerText = toTimeString(timer_time)
 }
-function ding(index) {
+function ding(index, express=true) {
 	// Play audio and update title
-	audio.currentTime = 0
-	audio.play()
-	console.log("Ding!")
-	document.title = "Time up!"
-	setTimeout(function() {
-		document.title = original_title
-	}, 2000)
+	if (express) {
+		audio.currentTime = 0
+		audio.play()
+		console.log("Ding!")
+		document.title = "Time up!"
+		setTimeout(function() {
+			document.title = original_title
+		}, 2000)
+	}
 
 	// Set active
 	let cards = document.getElementsByClassName("card")
@@ -729,8 +796,7 @@ function nextTimer(reversed = false) {
 		timer_pos = 7
 	} else if (timer_pos == 7) {
 		timer_pos = 0
-	}
-	if (reversed) {
+	} else if (reversed) {
 		timer_pos--
 	} else {
 		timer_pos++
@@ -740,15 +806,13 @@ function nextTimer(reversed = false) {
 	ding(timer_pos)
 }
 function pauseTimer() {
+	timer_loop.toggle()
 	if (timer_paused) {
-		timer_paused = false
 		document.getElementById("pause-img").setAttribute("src", "/static/Images/pause.svg")
-		timer_loop = setInterval(timer_tick, 1000)
 	} else {
-		timer_paused = true
 		document.getElementById("pause-img").setAttribute("src", "/static/Images/play.svg")
-		clearInterval(timer_loop)
 	}
+	timer_paused = !timer_paused
 }
 function toTimeString(time) {
 	let output = ""
@@ -760,8 +824,8 @@ function toTimeString(time) {
 	output += time[1]
 	return output
 }
-ding(timer_pos)
-
+ding(timer_pos, false)
+// ----------
 
 // Settings
 function updateSettings() {
@@ -857,5 +921,8 @@ function newLink() {
 	document.getElementById("link-name-input").value = ""
 	document.getElementById("link-link-input").value = ""
 }
+// ----------
+
 // Run
 startup()
+// ----------
