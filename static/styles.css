@@ -754,20 +754,7 @@ header {
 	margin-right: 20px;
 }
 
-/* Settings */
-.settings {
-	display: grid;
-	position: relative;
-	background-color: #ffffff;
-	gap: 10px;
-	grid-template-areas: 
-		'header header'
-		'curves links'
-		'other links';
-	grid-template-rows: min-content auto min-content;
-	grid-template-columns: min-content 1fr;
-	color: black;
-}
+/* Timer */
 .timer {
 	position: relative;
 	display: grid;
@@ -847,12 +834,28 @@ header {
 .timer #time .timer-nav img {
 	display: inline;
 	height: 100%;
+	user-select: none;
 }
 .timer #time .ticker {
 	font-size: 80px;
 	width: 100%;
 	text-align: center;
 	padding: 30px 0px;
+}
+
+/* Settings */
+.settings {
+	display: grid;
+	position: relative;
+	background-color: #ffffff;
+	gap: 10px;
+	grid-template-areas: 
+		'header header'
+		'curves links'
+		'other links';
+	grid-template-rows: min-content auto min-content;
+	grid-template-columns: min-content 1fr;
+	color: black;
 }
 .settings .settings-panel {
 	background-color: var(--light-gray);
