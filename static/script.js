@@ -89,7 +89,13 @@ var scoreType = 0
 // ----------
 
 // Favicon website pairs
-var imagePairs = [["classroom.google.com", "/static/Images/google-classroom.svg"], ["aps.elmhurst205.org", "/static/Images/ps_logo_lg.png"]]
+var imagePairs = [
+	["classroom.google.com", "/static/Images/google-classroom.svg"],
+	["aps.elmhurst205.org", "/static/Images/ps_logo_lg.png"],
+	["docs.google.com/document", "/static/Images/Docs_Logo.png"],
+	["docs.google.com/spreadsheets", "/static/Images/Sheets_Logo.png"],
+	["docs.google.com/presentation", "/static/Images/Slides_Logo.png"]
+]
 // ----------
 
 // Array
