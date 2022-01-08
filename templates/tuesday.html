@@ -130,35 +130,35 @@
 				<header>Timer</header>
 				<div class="panel" id="sequence">
 					<h2>Sequence</h2>
-					<button onclick="ding(0)" id="0" data-minutes="25" class="card">
+					<button onclick="ding(0)" data-minutes="25" class="card">
 						<h3>Work</h3>
 						<p>25 minutes</p>
 					</button>
-					<button onclick="ding(1)" id="1" data-minutes="5" class="card">
+					<button onclick="ding(1)" data-minutes="5" class="card">
 						<h3>Break</h3>
 						<p>5 minutes</p>
 					</button>
-					<button onclick="ding(2)" id="2" data-minutes="25" class="card">
+					<button onclick="ding(2)" data-minutes="25" class="card">
 						<h3>Work</h3>
 						<p>25 minute</p>
 					</button>
-					<button onclick="ding(3)" id="3" data-minutes="5" class="card">
+					<button onclick="ding(3)" data-minutes="5" class="card">
 						<h3>Break</h3>
 						<p>5 minutes</p>
 					</button>
-					<button onclick="ding(4)" id="4" data-minutes="25" class="card">
+					<button onclick="ding(4)" data-minutes="25" class="card">
 						<h3>Work</h3>
 						<p>25 minute</p>
 					</button>
-					<button onclick="ding(5)" id="5" data-minutes="5" class="card">
+					<button onclick="ding(5)" data-minutes="5" class="card">
 						<h3>Break</h3>
 						<p>5 minutes</p>
 					</button>
-					<button onclick="ding(6)" id="6" data-minutes="25" class="card">
+					<button onclick="ding(6)" data-minutes="25" class="card">
 						<h3>Work</h3>
 						<p>25 minute</p>
 					</button>
-					<button onclick="ding(7)" id="7" data-minutes="30" class="card">
+					<button onclick="ding(7)" data-minutes="30" class="card">
 						<h3>Break</h3>
 						<p>30 minutes</p>
 					</button>
@@ -260,25 +260,25 @@
 							console.log(err)
 						}
 					)
-					// navigator.serviceWorker.register('/sw8.js').then(function(registration) {
-					// 	console.log('ServiceWorker registered')
-					// 	navigator.serviceWorker.getRegistrations().then(function(registrations) {
-					// 		console.log("Updating")
-					// 		for(let registration of registrations) {
-					// 			registration.unregister()
-					// 		}
-					// 		navigator.serviceWorker.register('/sw8.js').then(
-					// 			function(registration) {
-					// 				console.log("Updated")
-					// 			}).catch(
-					// 			function(err) {
-					// 				console.log("Update failed")
-					// 			}
-					// 		)
-					// 	})
-					// }, function(err) {
-					// 	console.log('ServiceWorker registration failed: ', err)
-					// })
+					navigator.serviceWorker.register('/sw9.js').then(function(registration) {
+						console.log('ServiceWorker registered')
+						navigator.serviceWorker.getRegistrations().then(function(registrations) {
+							console.log("Updating")
+							for(let registration of registrations) {
+								registration.unregister()
+							}
+							navigator.serviceWorker.register('/sw9.js').then(
+								function(registration) {
+									console.log("Updated")
+								}).catch(
+								function(err) {
+									console.log("Update failed")
+								}
+							)
+						})
+					}, function(err) {
+						console.log('ServiceWorker registration failed: ', err)
+					})
 				})
 			}
 		</script>
