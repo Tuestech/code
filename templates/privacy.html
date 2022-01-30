@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Privacy Policy</title>
+
+	<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
+	<link rel="icon" href="{% static 'Images/Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
+	<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:light)">
+
 	<style>
 		* {
 			font-family: sans-serif;
@@ -14,27 +21,35 @@
 <body>
 	<h1 id="tuesday-technologies-privacy-policy">Tuesday Technologies Privacy Policy</h1>
 	<hr>
-	<p>Tuesday Technologies develops web applications for personal use. “Tuesday” or “we” or “us” or “our” refers to Tuesday Technologies in this privacy policy.</p>
-	<p>This privacy policy applies whenever you access or interact with any of our products, services, and/or content.</p>
+	<p>Tuesday Technologies develops web applications for personal use. “Tuesday” or “we” or “us” or “our” refers to Tuesday Technologies in this privacy policy. Users refer to any entity who accepts this privacy policy and has used a product from Tuesday Technologies.</p>
+	<p>This privacy policy applies whenever you access or interact with any of our products, services, or content.</p>
+
 	<h3 id="information-we-collect">Information we collect</h3>
 	<p>To provide our products, services, and content, we must collect data. Information we collect includes the name, start date, due date, progress, and link per tasks entered by the user. We also collect user preferences like the progress curve and convenient access links. </p>
-	<p>We also identify unique users by their Google accounts. We will never request any personal information such as name, age, location, etc. Every user is assigned a unique “user identification number,” which we use to identify users.</p>
+	<p>We also identify unique users by their Google accounts. We will never request any personal information such as age, location, etc. Every user is assigned a user identification number(UID) that doesn't reveal their personal information. UIDs are like unique name tags that are assigned to every user so we can store, find, and serve a user's data and only their data back to them.</p>
+	<p>From Google, we request the profile and email information so we can contact users to notify them of changes in policies. This information will not be distributed to others without the consent of the user.</p>
+	
 	<h3 id="how-we-collect-information">How we collect information</h3>
 	<p>Information associated with tasks and links is collected directly from the user through text input boxes with appropriate labels. Information associated with user preferences is also collected directly from the user, but through buttons with appropriate labels.</p>
-	<p>Information to identify the user is collected through Google OAuth. Users are presented with the Google “Oauth Consent Screen” where they are asked to log in and give consent to provide identification information.</p>
+	<p>Information to identify the user is collected through Google OAuth. Users are presented with the Google “OAuth Consent Screen” where they are asked to log in and give consent to provide identification information. We will not recieve your information if you do not consent in the "OAuth Consent Screen"</p>
+	
 	<h3 id="how-we-use-collected-information">How we use collected information</h3>
-	<p>Information associated with tasks is shown directly to the user. The start date, due date, and progress associated with tasks, and the user’s preferences about progress curves are used to calculate the difference between the user’s current progress and the predicted progress.</p>
-	<p>Information collected through Google OAuth is used to identify users from each other. We cannot read any information associated with individual users without their consent.</p>
+	<p>Information associated with tasks is shown directly to the user. The start date, due date, progress associated with tasks, and the user's preferences about progress curves are used to calculate the difference between the user's current progress and the predicted progress.</p>
+	<p>Information collected through Google OAuth is used to identify users from each other. We will not distribute any information associated with individual users without their consent.</p>
 	<p>Individual user information, such as information associated with tasks and user identification, is never shared with any entities not described in this privacy policy.</p>
+	
 	<h3 id="data-retention">Data retention</h3>
-	<p>We must retain the data we collect in order to provide our products, services, and content. Data will be retained until the user presses a “delete” button on any associated task or a “delete all data” button associated with all user data.</p>
+	<p>We retain the data we collect in order to provide a more complete experience across our products, services, and content. Data will be retained until the user presses a “delete” button on any associated task or a “delete all data” button associated with all user data. Users may also contact us using the methods listed in the contact section to request a deletion of their data.</p>
+	
 	<h3 id="communications">Communications</h3>
-	<p>When this privacy policy is changed, it will be updated. Users will be able to view changes to the privacy policy at <a href="https://tues.tech/privacy">https://tues.tech/privacy</a>.</p>
+	<p>When the effective privacy policy is updated, it will be available to everyone. Users may view the most recent privacy policy at <a href="https://tues.tech/privacy">https://tues.tech/privacy</a>.</p>
+	
 	<h3 id="dispute-resolution">Dispute resolution</h3>
-	<p>Users who do not accept this privacy policy cannot use or consume our products, services, and content. Entities who want more information about how this policy should be interpreted may contact us with the information listed below.</p>
+	<p>Users who do not accept this privacy policy may not use or consume our products, services, and content. More information about how this policy should be interpreted can be obtained by contacting us with the information listed below.</p>
+	
 	<h3 id="contact-information">Contact information</h3>
-	<p>Email us at:
-	67908@elmhurst205.org or 66935@elmhurst205.org </p>
-	<p>All technical resources are available at <a href="https://github.com/Tuestech/code">https://github.com/Tuestech/code</a>.</p>
+	<p>Questions, comments, and concerns regarding privacy may be directed to the email listed below.</p>
+	<p>Email us at <a href="mailto:contact@tues.tech">contact@tues.tech</a>.</p>
+	<p>Technical resources are available at <a href="https://github.com/Tuestech">https://github.com/Tuestech</a>.</p>
 </body>
 </html>
