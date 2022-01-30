@@ -740,16 +740,18 @@ class AccurateTimer {
 		this.interval = interval
 		this.target = new Date().valueOf()
 		this.paused = true
+		this.timeout = null
 	}
 	toggle() {
 		this.paused = !this.paused
+		if (this.paused) clearTimeout(this.timeout)
 		this.target = new Date().valueOf()
 		this.tick()
 	}
 	tick(obj = this) {
 		if (!obj.paused) {
 			obj.target += obj.interval
-			setTimeout(function() {
+			obj.timeout = setTimeout(function() {
 				obj.tick(obj)
 				obj.callback()
 			}, obj.target - new Date())
@@ -800,7 +802,7 @@ function ding(index, express=true) {
 function nextTimer(reversed = false) {
 	if (reversed && timer_pos == 0) {
 		timer_pos = 7
-	} else if (timer_pos == 7) {
+	} else if (!reversed && timer_pos == 7) {
 		timer_pos = 0
 	} else if (reversed) {
 		timer_pos--
