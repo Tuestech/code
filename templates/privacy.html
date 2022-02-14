@@ -1,55 +1,109 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Privacy Policy</title>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
-	<link rel="icon" href="{% static 'Images/Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
-	<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:light)">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<style>
-		* {
-			font-family: sans-serif;
-		}
-	</style>
-</head>
-<body>
-	<h1 id="tuesday-technologies-privacy-policy">Tuesday Technologies Privacy Policy</h1>
-	<hr>
-	<p>Tuesday Technologies develops web applications for personal use. “Tuesday” or “we” or “us” or “our” refers to Tuesday Technologies in this privacy policy. Users refer to any entity who accepts this privacy policy and has used a product from Tuesday Technologies.</p>
-	<p>This privacy policy applies whenever you access or interact with any of our products, services, or content.</p>
+		<meta property='og:title' content='Tuesday Technologies'/>
+		<meta property='og:description' content='We make transparent, accessible, and useful tools for students. Our constantly evolving suite of apps help you get things done faster and with higher quality.'/>
+		<meta property='og:url' content='https://tues.tech'/>
 
-	<h3 id="information-we-collect">Information we collect</h3>
-	<p>To provide our products, services, and content, we must collect data. Information we collect includes the name, start date, due date, progress, and link per tasks entered by the user. We also collect user preferences like the progress curve and convenient access links. </p>
-	<p>We also identify unique users by their Google accounts. We will never request any personal information such as age, location, etc. Every user is assigned a user identification number(UID) that doesn't reveal their personal information. UIDs are like unique name tags that are assigned to every user so we can store, find, and serve a user's data and only their data back to them.</p>
-	<p>From Google, we request the profile and email information so we can contact users to notify them of changes in policies. This information will not be distributed to others without the consent of the user.</p>
-	
-	<h3 id="how-we-collect-information">How we collect information</h3>
-	<p>Information associated with tasks and links is collected directly from the user through text input boxes with appropriate labels. Information associated with user preferences is also collected directly from the user, but through buttons with appropriate labels.</p>
-	<p>Information to identify the user is collected through Google OAuth. Users are presented with the Google “OAuth Consent Screen” where they are asked to log in and give consent to provide identification information. We will not recieve your information if you do not consent in the "OAuth Consent Screen"</p>
-	
-	<h3 id="how-we-use-collected-information">How we use collected information</h3>
-	<p>Information associated with tasks is shown directly to the user. The start date, due date, progress associated with tasks, and the user's preferences about progress curves are used to calculate the difference between the user's current progress and the predicted progress.</p>
-	<p>Information collected through Google OAuth is used to identify users from each other. We will not distribute any information associated with individual users without their consent.</p>
-	<p>Individual user information, such as information associated with tasks and user identification, is never shared with any entities not described in this privacy policy.</p>
-	
-	<h3 id="data-retention">Data retention</h3>
-	<p>We retain the data we collect in order to provide a more complete experience across our products, services, and content. Data will be retained until the user presses a “delete” button on any associated task or a “delete all data” button associated with all user data. Users may also contact us using the methods listed in the contact section to request a deletion of their data.</p>
-	
-	<h3 id="communications">Communications</h3>
-	<p>When the effective privacy policy is updated, it will be available to everyone. Users may view the most recent privacy policy at <a href="https://tues.tech/privacy">https://tues.tech/privacy</a>.</p>
-	
-	<h3 id="dispute-resolution">Dispute resolution</h3>
-	<p>Users who do not accept this privacy policy may not use or consume our products, services, and content. More information about how this policy should be interpreted can be obtained by contacting us with the information listed below.</p>
-	
-	<h3 id="contact-information">Contact information</h3>
-	<p>Questions, comments, and concerns regarding privacy may be directed to the email listed below.</p>
-	<p>Email us at <a href="mailto:contact@tues.tech">contact@tues.tech</a>.</p>
-	<p>Technical resources are available at <a href="https://github.com/Tuestech">https://github.com/Tuestech</a>.</p>
-</body>
+		<title>Tuesday Technologies - Home</title>
+
+		<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:no-preference)">
+		<link rel="icon" href="{% static 'Images/Favicon Dark.png'%}"  media="(prefers-color-scheme:dark)">
+		<link rel="icon" href="{% static 'Images/Favicon Light.png'%}" media="(prefers-color-scheme:light)">
+
+		<link rel="stylesheet" href="{% static 'landing.css'%}">
+	</head>
+	<body>
+		
+		<div id="gradient-container">
+			<svg id="svg" width="100%" height="765px" viewBox="0 20 80 100" preserveAspectRatio="none">
+				<defs>
+					<linearGradient id="Gradient1" x1="0" x2="1" y1="0" y2="2">
+						<stop class="stop1" offset="0%"/>
+						<stop class="stop2" offset="60%"/>
+					</linearGradient>
+					<style type="text/css">
+						.stop1 { stop-color: #98D4FF; }
+						.stop2 { stop-color: #F1BBFF; }
+					</style>
+				</defs>
+				<clipPath id="myClip">
+					<path id="gradient" d="M 0 0 h 100 v 100 h -100 v -100" vector-effect="non-scaling-stroke"/>
+				</clipPath>
+				<path id="path" d="M 0 0 h 100 v 80 c -8 7 -22 4 -29 0 s -15 -4 -23 0 s -19 4 -26 -1 s -17 -3 -22 1 v -80" vector-effect="non-scaling-stroke"/> 
+				<use clip-path="url(#myClip)" xlink:href="#path" fill="url(#Gradient1)"/>
+			</svg>
+
+			<nav>
+				<img src="{% static 'Images/Tuesday Logo Modern Angles.png'%}">
+				<a href="#about">About</a>
+				<a href="#products">Products</a>
+				<a href="https://tues.tech/accounts/login" class="del-500">Log in</a>
+			</nav>
+
+			<div class="top-box">
+				<h2>
+					Tools for students,<br>
+					by students
+				</h2>
+				<p>Tuesday helps you leverage
+					advanced algorithms to manage your
+					work and time while building 
+					executive functioning skills
+				</p>
+				<button onclick="javascript:window.location.href = 'https://tues.tech/accounts/login/?next=/app/'">Get Started</button>
+			</div>
+		</div>
+
+		<div class="main">
+			<div class="text-panel panel" id="about">
+				<h3>Who we are</h3>
+				<p>We are value <strong>transparency</strong>, <strong>privacy</strong>, and <strong>accessibility</strong>. There will never be any ads, pricetags, or unnecessary data collection. That's why we operate like a non-profit</p>
+			</div>
+			<div class="right image-panel panel" id="products">
+				<h3>Work Management</h3>
+				<p>We will help you get things done. Customize your dashboard to show only the information you need. You will have smart algorithms, insightful visualizations, and research-proven techniques, all in one place.</p>
+				<img src="{% static 'Images/Dash Image.svg'%}">
+				<button onclick="javascript:window.location.href = 'https://tues.tech/accounts/login/?next=/app/'">Get Started</button>
+			</div>
+			<div class="left image-panel panel">
+				<h3>Data analysis</h3>
+				<p>Working with data can be hard, but it doesn't have to be. You can design and train advanced neural networks to fit your needs, all without writing a single line of code.</p>
+				<img src="{% static 'Images/ML Image.svg'%}">
+				<button onclick="javascript:window.location.href = 'https://tues.tech/ml'">Join Beta</button>
+			</div>
+			<div class="text-panel panel">
+				<h3 id="test">Support us</h3>
+				<p>If you want to get involved or just want to support our work, that's great! We aren't accepting donations, but you can still contribute. Feedback, insights, and suggestions are invaluable to us and would be greatly appreciated.</p>
+				<button onclick="javascript:window.location.href = 'mailto:contact@tues.tech?subject=Contact'">Contact</button>
+			</div>
+		</div>
+
+		<footer>
+			<a href="https://tues.tech/privacy">Privacy</a>
+			<a href="https://github.com/Tuestech/code/blob/main/LICENSE">License</a>
+			<a href="https://github.com/Tuestech/code">Github</a>
+			<a href="mailto:contact@tues.tech?subject=Contact">Contact</a>
+		</footer>
+
+		<script type="text/javascript">
+			window.addEventListener("scroll", scroll);
+			function scroll() {
+				var scrollpercent = Math.min(document.body.scrollTop + document.documentElement.scrollTop, 500) / 500;
+				if (scrollpercent == 0) {
+					window.location.hash = "";
+				}
+				document.getElementById("svg").setAttribute("viewBox", scrollpercent*20+" 20 80 100")
+			}
+		</script>
+
+	</body>
 </html>
