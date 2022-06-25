@@ -1,4 +1,7 @@
 # Tuesday
+
+NOTE: This project is no longer being maintained because a full rewrite is in progress. It will remain in production as-is until the rewrite is complete.
+
 Tuesday is a smart work management tool that uses smart algorithms to help you keep track of and prioritize your tasks.
 
 ## Table of contents
